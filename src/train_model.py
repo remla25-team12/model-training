@@ -3,13 +3,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 import joblib
 from sklearn.metrics import confusion_matrix, accuracy_score
+from get_data import download_data
+from libml import preprocess_dataset
 
 # Training pipeline is taken from the following repository:
 # https://github.com/proksch/restaurant-sentiment
 
-# Load the dataset
+# Download and load the dataset
 # TODO: Should we make the dataset reading dynamic using the glob library?
+download_data()
 dataset = pd.read_csv('data/a1_RestaurantReviews_HistoricDump.tsv', delimiter = '\t', quoting = 3)
+
+# Preprocess the dataset
+X, y = preprocess_dataset(dataset)
 
 # Divide dataset into training and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
@@ -26,4 +32,4 @@ y_pred = classifier.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 
 print("Confusion Matrix:\n", cm)
-print("Accuracy Score:", accuracy_score(y_test, y_pred))    
+print("Accuracy Score:", accuracy_score(y_test, y_pred))

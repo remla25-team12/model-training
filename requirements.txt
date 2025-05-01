@@ -1,0 +1,5 @@
+requests
+pandas
+sklearn
+joblib
+libml @ git+https://github.com/remla25-team12/lib-ml

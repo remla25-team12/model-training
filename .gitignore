@@ -1,0 +1,6 @@
+# Below are from GitHub's official Python .gitignore template
+__pycache__/
+*.py[cod]
+*$py.class
+
+data/

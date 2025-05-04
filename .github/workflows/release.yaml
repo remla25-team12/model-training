@@ -1,0 +1,24 @@
+name: Release model-training
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload trained model to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            model/Classifier_Sentiment_Model.joblib
+            model/c1_BoW_Sentiment_Model.pkl

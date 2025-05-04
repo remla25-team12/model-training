@@ -1,5 +1,39 @@
 # Model Training
 
-This repository contains the ML pipeline for training a model for our application.
+This repository contains the machine learning pipeline for training the sentiment analysis model used in our application.
 
-The pre-processing logic is factored into the `lib-ml` library.
+## Repository Structure
+
+- `src/`
+  - `train_model.py`: Main script to run the training pipeline.
+  - `get_data.py`: Script to download the dataset from the source repository.
+- `model/`
+  - `Classifier_Sentiment_Model.joblib`: Trained sentiment classification model (Naive Bayes).
+  - `c1_BoW_Sentiment_Model.pkl`: Fitted Bag-of-Words vectorizer used during training.
+
+## Preprocessing Logic
+
+All preprocessing logic is factored out into the [`lib-ml`](https://github.com/remla25-team12/lib-ml) library.
+
+## How to Train the Model
+
+### 1. Install Dependencies
+Install the required libraries:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Run the Training Pipeline
+Execute the training script:
+
+```bash
+python3 src/train_model.py
+```
+
+## Output
+
+After training, the following models are saved to `model/`:
+
+- `Classifier_Sentiment_Model.joblib`: Trained sentiment classification model.
+- `c1_BoW_Sentiment_Model.pkl`: Fitted Bag-of-Words vectorizer.

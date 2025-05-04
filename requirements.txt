@@ -2,4 +2,4 @@ requests
 pandas
 scikit-learn
 joblib
-libml @ git+https://github.com/remla25-team12/lib-ml@v0.1.2
+libml @ git+https://github.com/remla25-team12/lib-ml@v0.1.3

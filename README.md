@@ -21,16 +21,16 @@ All preprocessing logic is factored out into the [`lib-ml`](https://github.com/r
    ```bash
    git clone https://github.com/remla25-team12/model-training
    cd model-training
-    ```
+   ```
 2. Install dependencies:
-    ```bash
+   ```bash
    python -m pip install --upgrade pip
    pip install -r requirements.txt
    ```
 3. Run the training pipeline:
-  ```bash
-  python3 src/train_model.py
-  ```
+   ```bash
+   python3 src/train_model.py
+   ```
    
 ## Output
 

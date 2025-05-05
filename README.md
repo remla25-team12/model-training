@@ -17,20 +17,21 @@ All preprocessing logic is factored out into the [`lib-ml`](https://github.com/r
 
 ## How to Train the Model
 
-### 1. Install Dependencies
-Install the required libraries:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Run the Training Pipeline
-Execute the training script:
-
-```bash
-python3 src/train_model.py
-```
-
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/remla25-team12/model-training
+   cd model-training
+    ```
+2. Install dependencies:
+    ```bash
+   python -m pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+3. Run the training pipeline:
+  ```bash
+  python3 src/train_model.py
+  ```
+   
 ## Output
 
 After training, the following models are saved to `model/`:

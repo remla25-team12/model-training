@@ -11,12 +11,11 @@ def download_data():
 
     response = requests.get(url)
     if response.status_code == 200:
-         with open(output_file, "wb") as f:
+        with open(output_file, "wb") as f:
             f.write(response.content)
             print("Dataset downloaded successfully.")
     else:
         print(f"Failed to download the dataset with status code: {response.status_code}")
-    
 if __name__ == "__main__":
     download_data()
 

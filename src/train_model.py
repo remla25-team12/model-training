@@ -17,6 +17,7 @@ dataset = pd.read_csv('data/a1_RestaurantReviews_HistoricDump.tsv', delimiter = 
 
 # Preprocess the dataset
 X, y, cv = preprocess_dataset(dataset)
+#TODO: maybe move this to preprocess_data.py
 
 # Save the CountVectorizer model for later use during inference
 bow_path = 'model/c1_BoW_Sentiment_Model.pkl'

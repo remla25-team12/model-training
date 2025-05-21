@@ -18,11 +18,20 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-          
+
       - name: Install dependencies
         run: |
           pip install pylint==3.3.6
 
-      - name: Run pylint
+      - name: Run pylint and extract score
+        id: pylint_score
         run: |
-          pylint src/ || true
+          SCORE=$(pylint src/ | tee pylint.log | tail -2 | head -1 | grep -oP '\d+\.\d+')
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+
+      - name: Update README with pylint score
+        run: |
+          sed -i "s/Pylint Score: <!-- PYLINT_SCORE -->.*/Pylint Score: <!-- PYLINT_SCORE --> ${SCORE}\/10/" README.md
+        env:
+          SCORE: ${{ steps.pylint_score.outputs.score }}
+

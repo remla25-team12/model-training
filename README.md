@@ -38,3 +38,7 @@ After training, the following models are saved to `model/`:
 
 - `Classifier_Sentiment_Model.joblib`: Trained sentiment classification model.
 - `c1_BoW_Sentiment_Model.pkl`: Fitted Bag-of-Words vectorizer.
+
+## Linting
+### PyLint
+Pylint Score: <!-- PYLINT_SCORE --> _not yet generated_

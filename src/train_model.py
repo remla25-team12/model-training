@@ -1,16 +1,15 @@
-import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 import joblib
-import pickle
 from configure_loader import load_config
 from utils import load_preprocessed_data
 
 def train_model():
+    # Load configuration
     config = load_config()
 
-    # Load the preprocessed dataset and vectorizer
+    # Load the preprocessed dataset
     X, y = load_preprocessed_data()
 
     # Divide dataset into training and test set

@@ -12,3 +12,11 @@ model:
   count_vectorizer:
     bow_dir: "./models"
     bow_filename: "c1_BoW_Sentiment_Model.pkl"
+
+  classifier:
+    model_dir: "./models"
+    model_filename: "Classifier_Sentiment_Model.joblib"
+
+training:
+  test_size: 0.2
+  random_state: 0

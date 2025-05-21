@@ -3,7 +3,6 @@ import pandas as pd
 import pickle
 import joblib
 from libml import preprocess_dataset
-from get_data import download_data
 from configure_loader import load_config
 
 def preprocess():

@@ -1,41 +1,64 @@
 import pandas as pd
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 import joblib
 import pickle
-from sklearn.metrics import confusion_matrix, accuracy_score
-from get_data import download_data
-from libml import preprocess_dataset
+from configure_loader import load_config
 
-# Training pipeline is taken from the following repository:
-# https://github.com/proksch/restaurant-sentiment
+def load_preprocessed_data():
+    config = load_config()
 
-# Download and load the dataset
-# TODO: Should we make the dataset reading dynamic using the glob library?
-download_data()
-dataset = pd.read_csv('data/a1_RestaurantReviews_HistoricDump.tsv', delimiter = '\t', quoting = 3)
+    preprocessed_dir = config["dataset"]["preprocessed"]["output_dir"]
+    X_filename = config["dataset"]["preprocessed"]["X_filename"]
+    y_filename = config["dataset"]["preprocessed"]["y_filename"]
 
-# Preprocess the dataset
-X, y, cv = preprocess_dataset(dataset)
-#TODO: maybe move this to preprocess_data.py
+    X_path = os.path.join(preprocessed_dir, X_filename)
+    y_path = os.path.join(preprocessed_dir, y_filename)
+    
+    X = joblib.load(X_path)
+    y = joblib.load(y_path)
 
-# Save the CountVectorizer model for later use during inference
-bow_path = 'model/c1_BoW_Sentiment_Model.pkl'
-pickle.dump(cv, open(bow_path, "wb"))
+    return X, y
 
-# Divide dataset into training and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
 
-# Train and fit a Naive Bayes classifier 
-classifier = GaussianNB()
-classifier.fit(X_train, y_train)
+def load_vectorizer():
+    config = load_config()
+    bow_dir = config["model"]["count_vectorizer"]["bow_dir"]
+    bow_filename = config["model"]["count_vectorizer"]["bow_filename"]
+    bow_path = os.path.join(bow_dir, bow_filename)
 
-# Exporting NB Classifier to later use in prediction
-joblib.dump(classifier, 'model/Classifier_Sentiment_Model.joblib') 
+    with open(bow_path, "rb") as f:
+        cv = pickle.load(f)
 
-# Evaluate model performance
-y_pred = classifier.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
+    return cv
 
-print("Confusion Matrix:\n", cm)
-print("Accuracy Score:", accuracy_score(y_test, y_pred))
+
+def train_model():
+    config = load_config()
+
+    # Load the preprocessed dataset and vectorizer
+    X, y = load_preprocessed_data()
+    cv = load_vectorizer()
+
+    # Divide dataset into training and test set
+    test_size = config["training"]["test_size"]
+    random_state = config["training"]["random_state"]
+    X_train, _, y_train, _ = train_test_split(X, y, test_size = test_size, random_state = random_state)
+
+    # Train and fit a Naive Bayes classifier 
+    classifier = GaussianNB()
+    classifier.fit(X_train, y_train)
+
+    # Exporting NB Classifier to later use in prediction
+    classifier_dir = config["model"]["classifier"]["model_dir"]
+    os.makedirs(classifier_dir, exist_ok=True)
+
+    classifier_filename = config["model"]["classifier"]["model_filename"]
+    classifier_path = os.path.join(classifier_dir, classifier_filename)
+
+    joblib.dump(classifier, classifier_path)
+
+
+if __name__ == "__main__":
+    train_model()

@@ -12,3 +12,19 @@ stages:
       hash: md5
       md5: 102f1f4193e0bdebdd6cce7f13e0a839
       size: 54686
+  train_model:
+    cmd: python src/train_model.py
+    deps:
+    - path: data/a1_RestaurantReviews_HistoricDump.tsv
+      hash: md5
+      md5: 102f1f4193e0bdebdd6cce7f13e0a839
+      size: 54686
+    - path: src/train_model.py
+      hash: md5
+      md5: f328282dc5045c3b8c9e8adb09e8eeb1
+      size: 1427
+    outs:
+    - path: model/Classifier_Sentiment_Model.joblib
+      hash: md5
+      md5: 7dc6aed243ae2e83d0af2e966804ad5f
+      size: 46215

@@ -1,6 +1,8 @@
-requests
-pandas
-scikit-learn
-joblib
+requests==2.32.3
+pandas==2.2.3
+scikit-learn==1.6.1
+joblib==1.4.2
+libml @ git+https://github.com/remla25-team12/lib-ml.git@v0.1.5#egg=libml
+joblib~=1.4.2
+requests~=2.32.3
 pylint==3.3.6 
-libml @ git+https://github.com/remla25-team12/lib-ml@v0.1.3

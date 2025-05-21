@@ -28,9 +28,12 @@ def preprocess():
     # Save the preprocessed data
     preprocessed_dir = config["dataset"]["preprocessed"]["output_dir"]
     os.makedirs(preprocessed_dir, exist_ok=True)
-    
-    X_path = os.path.join(preprocessed_dir, "X.joblib")
-    y_path = os.path.join(preprocessed_dir, "y.joblib")
+
+    X_filename = config["dataset"]["preprocessed"]["X_filename"]
+    y_filename = config["dataset"]["preprocessed"]["y_filename"]
+
+    X_path = os.path.join(preprocessed_dir, X_filename)
+    y_path = os.path.join(preprocessed_dir, y_filename)
     
     joblib.dump(X, X_path)
     joblib.dump(y, y_path)

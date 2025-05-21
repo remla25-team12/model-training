@@ -5,6 +5,8 @@ dataset:
     output_filename: "a1_RestaurantReviews_HistoricDump.tsv"
   preprocessed:
     output_dir: "./data/processed"
+    X_filename: "X.joblib"
+    y_filename: "y.joblib"
 
 model:
   count_vectorizer:

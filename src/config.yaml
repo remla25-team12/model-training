@@ -1,0 +1,12 @@
+dataset:
+  raw:
+    url: "https://raw.githubusercontent.com/proksch/restaurant-sentiment/main/a1_RestaurantReviews_HistoricDump.tsv"
+    output_dir: "./data/initial_raw"
+    output_filename: "a1_RestaurantReviews_HistoricDump.tsv"
+  preprocessed:
+    output_dir: "./data/processed"
+
+model:
+  count_vectorizer:
+    bow_dir: "./models"
+    bow_filename: "c1_BoW_Sentiment_Model.pkl"

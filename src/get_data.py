@@ -1,13 +1,15 @@
 import os
 import requests
-
-def download_data():
-    # Link to the training dataset from the Sentiment Analysis repository
-    url = "https://raw.githubusercontent.com/proksch/restaurant-sentiment/main/a1_RestaurantReviews_HistoricDump.tsv"
+from configure_loader import load_config
     
-    output_dir = "./data"
+def download_data():
+    config = load_config()
+    url = config["dataset"]["raw"]["url"]
+    output_dir = config["dataset"]["raw"]["output_dir"]
+    output_filename = config["dataset"]["raw"]["output_filename"]
+
     os.makedirs(output_dir, exist_ok=True)
-    output_file = os.path.join(output_dir, "a1_RestaurantReviews_HistoricDump.tsv")
+    output_file = os.path.join(output_dir, output_filename)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -17,6 +19,7 @@ def download_data():
     else:
         print(f"Failed to download the dataset with status code: {response.status_code}")
     
+
 if __name__ == "__main__":
     download_data()
 

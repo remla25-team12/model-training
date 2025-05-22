@@ -15,4 +15,6 @@ jobs:
         pip install -r requirements.txt
     - name: Analyzing the code with pylint
       run: |
-        pylint $(git ls-files 'src/*.py')
+          SCORE_GETDATA=$(pylint src/get_data.py | grep 'Your code has been rated at ' | awk '{print $7}' | sed 's/...$//')
+          echo "Pylint score for get_data.py: $SCORE_GETDATA"
+          echo "PYLINT_SCORE_GETDATA=$SCORE_GETDATA" >> $GITHUB_ENV

@@ -18,6 +18,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Run pylint on all .py files
+      run: |
+        pylint $(git ls-files '*.py')
+    
     - name: Add pylint badges to README
       uses: Silleellie/pylint-github-action@v2.1
       with:

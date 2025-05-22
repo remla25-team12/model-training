@@ -20,7 +20,6 @@ stages:
     deps:
     - src/train_model.py
     - data/processed/ # Processed data
-    - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
     outs:
     - models/Classifier_Sentiment_Model.joblib # Classifier
   

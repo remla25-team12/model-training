@@ -26,10 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Init DVC
-        run: |
-          dvc init --no-scm
-
       - name: Add DVC remote
         run: |
           dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }}

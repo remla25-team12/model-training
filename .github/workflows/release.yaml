@@ -26,19 +26,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Add DVC remote
-        run: |
-          dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }}
-          dvc remote default myremote
-
       - name: Generate GDrive credentials.json from GitHub Secret
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
           echo $GDRIVE_CREDENTIALS_DATA > credentials.json
 
-      - name: Modify DVC Remote
+      - name: Set up DVC Remote
         run: |
+            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }}
+            dvc remote default myremote
             dvc remote modify myremote --local \
             gdrive_service_account_json_file_path credentials.json
 

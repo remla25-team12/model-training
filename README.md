@@ -1,5 +1,5 @@
 # Model Training
-![pylint](https://img.shields.io/badge/PyLint-5.86-orange?logo=python&logoColor=white)
+![pylint](https://img.shields.io/badge/PyLint-9.14-yellow?logo=python&logoColor=white)
 
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application. 
 
@@ -67,5 +67,7 @@ dvc pull
 TODO explain the config.yaml and what people may want to play with while training.
    
 
-
-
+## Linting
+### PyLint
+Project specific:
+1. Naming: Add the relevant good names, including use of X, X_train, X_test etc, as they are informative in ML training.

@@ -20,7 +20,7 @@ jobs:
     
     - name: Run pylint on all .py files
       run: |
-        pylint $(git ls-files '*.py')
+        PYTHONPATH=$(pwd) pylint $(git ls-files '*.py')
     
     - name: Add pylint badges to README
       uses: Silleellie/pylint-github-action@v2.1

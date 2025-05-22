@@ -23,7 +23,7 @@ def _load_raw_dataset(config):
     raw_dataset = pd.read_csv(
         os.path.join(output_dir, output_filename),
         delimiter = '\t', quoting = 3)
-    
+
     print(f"Loaded raw dataset from {output_dir}")
     return raw_dataset
 

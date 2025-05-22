@@ -1,41 +1,46 @@
-import pandas as pd
+"""
+Trains the Naive Bayes Classifier model
+"""
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 import joblib
-import pickle
-from sklearn.metrics import confusion_matrix, accuracy_score
-from get_data import download_data
-from libml import preprocess_dataset
+from configure_loader import load_config
+from utils import load_preprocessed_data
 
-# Training pipeline is taken from the following repository:
-# https://github.com/proksch/restaurant-sentiment
+def train_model():
+    """
+    Main function for training the Naive Bayes Classifier
+    """
+    # Load configuration
+    config = load_config()
 
-# Download and load the dataset
-# TODO: Should we make the dataset reading dynamic using the glob library?
-download_data()
-dataset = pd.read_csv('data/a1_RestaurantReviews_HistoricDump.tsv', delimiter = '\t', quoting = 3)
+    # Load the preprocessed dataset
+    print("Loading dataset...")
+    X, y = load_preprocessed_data(config)
 
-# Preprocess the dataset
-X, y, cv = preprocess_dataset(dataset)
-#TODO: maybe move this to preprocess_data.py
+    # Divide dataset into training and test set
+    test_size = config["training"]["test_size"]
+    random_state = config["training"]["random_state"]
+    X_train, _, y_train, _ = train_test_split(X, y,
+                                              test_size = test_size,
+                                              random_state = random_state)
 
-# Save the CountVectorizer model for later use during inference
-bow_path = 'model/c1_BoW_Sentiment_Model.pkl'
-pickle.dump(cv, open(bow_path, "wb"))
+    # Train and fit a Naive Bayes classifier
+    classifier = GaussianNB()
+    print("Training classifier...")
+    classifier.fit(X_train, y_train)
 
-# Divide dataset into training and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
+    # Exporting NB Classifier to later use in prediction
+    classifier_dir = config["model"]["classifier"]["model_dir"]
+    os.makedirs(classifier_dir, exist_ok=True)
+    
+    classifier_filename = config["model"]["classifier"]["model_filename"]
+    classifier_path = os.path.join(classifier_dir, classifier_filename)
 
-# Train and fit a Naive Bayes classifier 
-classifier = GaussianNB()
-classifier.fit(X_train, y_train)
+    joblib.dump(classifier, classifier_path)
+    print(f"Saved trained classifier model in {classifier_dir}")
 
-# Exporting NB Classifier to later use in prediction
-joblib.dump(classifier, 'model/Classifier_Sentiment_Model.joblib') 
 
-# Evaluate model performance
-y_pred = classifier.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-
-print("Confusion Matrix:\n", cm)
-print("Accuracy Score:", accuracy_score(y_test, y_pred))
+if __name__ == "__main__":
+    train_model()

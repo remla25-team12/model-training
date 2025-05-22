@@ -1,7 +1,7 @@
 # Model Training
 
-#TEST: Pylint score for get_data: {{PYLINT_SCORE_GETDATA}}
-
+TEST:\
+![pylint]()
 
 This repository contains the machine learning pipeline for training the sentiment analysis model used in our application.
 

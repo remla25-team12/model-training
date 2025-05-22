@@ -31,4 +31,4 @@ stages:
     - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
     - models/Classifier_Sentiment_Model.joblib # Classifier
     metrics:
-      - metrics.json
+      - data/model_eval/metrics.json

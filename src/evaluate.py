@@ -34,7 +34,7 @@ def evaluate_model():
     print("--- Evaluation results: ---")
     print(report)
 
-    with open("metrics.json", "w",encoding="utf-8") as f:
+    with open("data/model_eval/metrics.json", "w",encoding="utf-8") as f:
         json.dump(report, f, indent=4)
 
 

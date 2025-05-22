@@ -29,6 +29,7 @@ jobs:
       - name: Add DVC remote
         run: |
           dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }}
+          dvc remote default myremote
 
       - name: Generate GDrive credentials.json from GitHub Secret
         env:

@@ -18,14 +18,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    # - name: Analyzing the code with pylint
-    #   run: |
-    #       SCORE_GETDATA=$(pylint src/get_data.py | grep 'Your code has been rated at ' | awk '{print $7}' | sed 's/...$//')
-    #       echo "Pylint score for get_data.py: $SCORE_GETDATA"
-    #       echo "PYLINT_SCORE_GETDATA=$SCORE_GETDATA" >> $GITHUB_ENV
-    
     - name: Add pylint badges to README
       uses: Silleellie/pylint-github-action@v2.1
       with:
-        lint-path: src/get_data.py  
+        lint-path: src
         python-version: 3.9 

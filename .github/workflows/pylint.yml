@@ -1,29 +1,29 @@
-# name: pylint
-# on: [push]
-# permissions:
-#   contents: write
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v2
+name: pylint
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
     
-#     - name: Set up Python 3.9
-#       uses: actions/setup-python@v2
-#       with:
-#         python-version: 3.9
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
     
-#     - name: Installing dependencies
-#       run: |
-#         python -m pip install --upgrade pip
-#         pip install -r requirements.txt
+    - name: Installing dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
     
-#     - name: Run pylint on all .py files
-#       run: |
-#         pylint $(git ls-files '*.py')
+    - name: Run pylint on all .py files
+      run: |
+        pylint $(git ls-files '*.py')
     
-#     - name: Add pylint badges to README
-#       uses: Silleellie/pylint-github-action@v2.1
-#       with:
-#         lint-path: src
-#         python-version: 3.9 
+    - name: Add pylint badges to README
+      uses: Silleellie/pylint-github-action@v2.1
+      with:
+        lint-path: src
+        python-version: 3.9 

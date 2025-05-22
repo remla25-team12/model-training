@@ -32,15 +32,21 @@ jobs:
         run: |
           echo $GDRIVE_CREDENTIALS_DATA | base64 -d > credentials.json
 
+      - name: Initialize DVC and set configs
+        run: |
+          dvc init
+
       - name: Set up DVC Remote
         run: |
             dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }}
             dvc remote default myremote
+            dvc remote modify myremote gdrive_acknowledge_abuse true
+            dvc remote modify myremote gdrive_use_service_account true
             dvc remote modify myremote --local \
             gdrive_service_account_json_file_path credentials.json
 
       - name: DVC - Pull models and data
-        run: dvc pull -v
+        run: dvc pull
 
       - name: DVC - Reproduce pipeline
         run: dvc repro

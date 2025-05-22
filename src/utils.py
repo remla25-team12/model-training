@@ -1,9 +1,14 @@
+"""
+Helper functions for loading processed data and models
+"""
 import os
 import pickle
 import joblib
-from configure_loader import load_config
 
 def load_preprocessed_data(config):
+    """
+    Loads the preprocessed dataset
+    """
     preprocessed_dir = config["dataset"]["preprocessed"]["output_dir"]
     X_filename = config["dataset"]["preprocessed"]["X_filename"]
     y_filename = config["dataset"]["preprocessed"]["y_filename"]

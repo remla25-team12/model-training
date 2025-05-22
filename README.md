@@ -1,6 +1,4 @@
 # Model Training
-
-TEST:\
 ![pylint](https://img.shields.io/badge/PyLint-6.11-orange?logo=python&logoColor=white)
 
 This repository contains the machine learning pipeline for training the sentiment analysis model used in our application.

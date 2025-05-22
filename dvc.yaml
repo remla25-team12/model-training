@@ -29,5 +29,7 @@ stages:
     deps:
     - src/evaluate.py
     - data/processed/ # Processed data
-    - models/Classifier_Sentiment_Model.joblib # Classifier
     - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
+    - models/Classifier_Sentiment_Model.joblib # Classifier
+    # metrics:
+    #   - metrics.json # [TODO]: add metrics

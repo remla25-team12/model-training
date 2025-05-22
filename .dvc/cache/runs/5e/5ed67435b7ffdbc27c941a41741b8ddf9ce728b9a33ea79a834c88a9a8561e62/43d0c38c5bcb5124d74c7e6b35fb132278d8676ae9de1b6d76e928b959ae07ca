@@ -1,0 +1,16 @@
+cmd: python src/train_model.py
+deps:
+- path: data/processed/
+  hash: md5
+  md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+  size: 10231666
+  nfiles: 2
+- path: src/train_model.py
+  hash: md5
+  md5: bbc6d2ae53452a9b601a8ebb5428294b
+  size: 1481
+outs:
+- path: models/Classifier_Sentiment_Model.joblib
+  hash: md5
+  md5: 7dc6aed243ae2e83d0af2e966804ad5f
+  size: 46215

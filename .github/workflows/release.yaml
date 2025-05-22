@@ -40,12 +40,12 @@ jobs:
 
       - name: Set up DVC Remote
         run: |
-            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f 
+            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f
             dvc remote default myremote
-            dvc remote modify myremote gdrive_acknowledge_abuse true -f
-            dvc remote modify myremote gdrive_use_service_account true -f
+            dvc remote modify myremote gdrive_acknowledge_abuse true
+            dvc remote modify myremote gdrive_use_service_account true
             dvc remote modify myremote --local \
-            gdrive_service_account_json_file_path credentials.json -f
+            gdrive_service_account_json_file_path credentials.json
 
       - name: DVC - Pull models and data
         run: dvc pull

@@ -50,9 +50,6 @@ jobs:
       - name: Pull models and data
         run: dvc pull
 
-      # - name: Reproduce training pipeline
-      #   run: dvc repro
-
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2
         with:

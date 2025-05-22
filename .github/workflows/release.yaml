@@ -1,9 +1,9 @@
 name: Release model-training
 
-on: [push]
-  #push: 
-    # tags:
-    #   - "v[0-9]+.[0-9]+.[0-9]+*"
+on: 
+  push: 
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
 permissions:
   contents: write
@@ -28,9 +28,9 @@ jobs:
 
       - name: Generate GDrive credentials.json from GitHub Secret
         env:
-          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA_BASE64 }}
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
-          echo $GDRIVE_CREDENTIALS_DATA | base64 -d > credentials.json
+          echo $GDRIVE_CREDENTIALS_DATA > gdrive_sa_credentials.json.json
 
       - name: Initialize DVC if needed
         run: |
@@ -45,18 +45,17 @@ jobs:
             dvc remote modify myremote gdrive_acknowledge_abuse true
             dvc remote modify myremote gdrive_use_service_account true
             dvc remote modify myremote --local \
-            gdrive_service_account_json_file_path credentials.json
+            gdrive_service_account_json_file_path gdrive_sa_credentials.json.json
 
-      - name: DVC - Pull models and data
+      - name: Pull models and data
         run: dvc pull
 
-      - name: DVC - Reproduce pipeline
-        run: dvc repro
+      # - name: Reproduce training pipeline
+      #   run: dvc repro
 
-
-      # - name: Upload trained model to GitHub Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: |
-      #       models/Classifier_Sentiment_Model.joblib
-      #       models/c1_BoW_Sentiment_Model.pkl
+      - name: Upload trained model to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            models/Classifier_Sentiment_Model.joblib
+            models/c1_BoW_Sentiment_Model.pkl

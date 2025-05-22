@@ -42,4 +42,5 @@ After training, the following models are saved to `model/`:
 
 ## Linting
 ### PyLint
-Pylint Score: <!-- PYLINT_SCORE --> _not yet generated_
+Project specific:
+1. Naming: Add the relevant good names, including use of X, X_train, X_test etc, as they are informative in ML training.

@@ -190,16 +190,11 @@ function-naming-style=snake_case
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=i,
-           j,
-           k,
-           ex,
-           Run,
-           _
+good-names=X,X_train,X_test, y_train, y_test
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
-good-names-rgxs=
+good-names-rgxs=^X_.*$,^y_.*$,^.*_path$,^.*_filename$
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no
@@ -438,8 +433,7 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         use-implicit-booleaness-not-comparison-to-string,
-        use-implicit-booleaness-not-comparison-to-zero,
-        invalid-name,
+        use-implicit-booleaness-not-comparison-to-zero
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

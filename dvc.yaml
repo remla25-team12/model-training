@@ -4,19 +4,31 @@ stages:
     deps:
     - src/get_data.py
     outs:
-    - data/a1_RestaurantReviews_HistoricDump.tsv
+    - data/initial_raw # Raw data
 
-#  process_data: TODO: SEPARATE THE PREPROCESSING FROM TRAIN DATA?
-#    cmd: python src/preprocess_data.py
-#    deps:
-#    - src/preprocess_data.py
-#    outs:
-#    - outputs/preprocessed_data.joblib
+  process_data:
+    cmd: python src/preprocess_data.py
+    deps:
+    - src/preprocess_data.py
+    - data/initial_raw # Raw data
+    outs:
+    - data/processed/ # Processed data
+    - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
+
   train_model:
     cmd: python src/train_model.py
     deps:
-    - data/a1_RestaurantReviews_HistoricDump.tsv
     - src/train_model.py
+    - data/processed/ # Processed data
     outs:
-    - model/Classifier_Sentiment_Model.joblib
-  #TODO: EVAL
+    - models/Classifier_Sentiment_Model.joblib # Classifier
+  
+  eval_model:
+    cmd: python src/evaluate.py
+    deps:
+    - src/evaluate.py
+    - data/processed/ # Processed data
+    - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
+    - models/Classifier_Sentiment_Model.joblib # Classifier
+    # metrics:
+    #   - metrics.json # [TODO]: add metrics

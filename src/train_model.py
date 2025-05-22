@@ -1,3 +1,6 @@
+"""
+Trains the Naive Bayes Classifier model
+"""
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
@@ -6,6 +9,9 @@ from configure_loader import load_config
 from utils import load_preprocessed_data
 
 def train_model():
+    """
+    Main function for training the Naive Bayes Classifier
+    """
     # Load configuration
     config = load_config()
 
@@ -15,9 +21,11 @@ def train_model():
     # Divide dataset into training and test set
     test_size = config["training"]["test_size"]
     random_state = config["training"]["random_state"]
-    X_train, _, y_train, _ = train_test_split(X, y, test_size = test_size, random_state = random_state)
+    X_train, _, y_train, _ = train_test_split(X, y,
+                                              test_size = test_size,
+                                              random_state = random_state)
 
-    # Train and fit a Naive Bayes classifier 
+    # Train and fit a Naive Bayes classifier
     classifier = GaussianNB()
     classifier.fit(X_train, y_train)
 

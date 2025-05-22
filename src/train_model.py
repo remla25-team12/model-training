@@ -34,7 +34,7 @@ def train_model():
     # Exporting NB Classifier to later use in prediction
     classifier_dir = config["model"]["classifier"]["model_dir"]
     os.makedirs(classifier_dir, exist_ok=True)
-    
+
     classifier_filename = config["model"]["classifier"]["model_filename"]
     classifier_path = os.path.join(classifier_dir, classifier_filename)
 

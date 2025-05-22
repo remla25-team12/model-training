@@ -1,10 +1,11 @@
 """
 Evaluates the model's performance
 """
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, classification_report
 from sklearn.model_selection import train_test_split
 from utils import load_classifier, load_preprocessed_data
 from configure_loader import load_config
+import json
 
 def evaluate_model():
     """
@@ -27,11 +28,18 @@ def evaluate_model():
 
     # Evaluate model performance on the test set
     y_pred = classifier.predict(X_test)
-    cm = confusion_matrix(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+    # cm = confusion_matrix(y_test, y_pred)
+    # accuracy = accuracy_score(y_test, y_pred)
+    # f1 = f1_score(y_test, y_pred, average='weighted')
+
+
 
     print("--- Evaluation results: ---")
-    print("Confusion Matrix:\n", cm)
-    print("Accuracy Score:", accuracy_score(y_test, y_pred))
+    print(report)
+
+    with open("metrics.json", "w") as f:
+        json.dump(report, f, indent=4)
 
 
 if __name__ == "__main__":

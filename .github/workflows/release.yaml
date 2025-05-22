@@ -16,6 +16,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate GDrive credentials.json from GitHub Secret
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: |
+          echo $GDRIVE_CREDENTIALS_DATA > credentials.json
+
+      - name: Modify DVC Remote
+        run: |
+            dvc remote modify myremote --local\
+            gdrive_service_account_json_file_path credentials.json
+
+      - name: DVC - Pull models and data
+        run: dvc pull -v
+
+      - name: DVC - Reproduce pipeline
+        run: dvc repro
+
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2
         with:

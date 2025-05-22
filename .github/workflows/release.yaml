@@ -40,8 +40,8 @@ jobs:
 
       - name: Set up DVC Remote
         run: |
-            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f
-            dvc remote default myremote -f
+            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f 
+            dvc remote default myremote
             dvc remote modify myremote gdrive_acknowledge_abuse true -f
             dvc remote modify myremote gdrive_use_service_account true -f
             dvc remote modify myremote --local \

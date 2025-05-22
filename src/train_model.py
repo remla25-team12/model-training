@@ -16,7 +16,8 @@ def train_model():
     config = load_config()
 
     # Load the preprocessed dataset
-    X, y = load_preprocessed_data()
+    print("Loading dataset...")
+    X, y = load_preprocessed_data(config)
 
     # Divide dataset into training and test set
     test_size = config["training"]["test_size"]
@@ -27,16 +28,18 @@ def train_model():
 
     # Train and fit a Naive Bayes classifier
     classifier = GaussianNB()
+    print("Training classifier...")
     classifier.fit(X_train, y_train)
 
     # Exporting NB Classifier to later use in prediction
     classifier_dir = config["model"]["classifier"]["model_dir"]
     os.makedirs(classifier_dir, exist_ok=True)
-
+    
     classifier_filename = config["model"]["classifier"]["model_filename"]
     classifier_path = os.path.join(classifier_dir, classifier_filename)
 
     joblib.dump(classifier, classifier_path)
+    print(f"Saved trained classifier model in {classifier_dir}")
 
 
 if __name__ == "__main__":

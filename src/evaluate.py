@@ -14,8 +14,8 @@ def evaluate_model():
     config = load_config()
 
     # Load the preprocessed data and trained classifier
-    X, y = load_preprocessed_data()
-    classifier = load_classifier()
+    X, y = load_preprocessed_data(config)
+    classifier = load_classifier(config)
 
     # Divide dataset into training and test set
     # using the same test size and random state as used during training
@@ -25,10 +25,11 @@ def evaluate_model():
                                             test_size = test_size,
                                             random_state = random_state)
 
-    # Evaluate model performance
+    # Evaluate model performance on the test set
     y_pred = classifier.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
 
+    print("--- Evaluation results: ---")
     print("Confusion Matrix:\n", cm)
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
 

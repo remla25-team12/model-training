@@ -23,6 +23,8 @@ def _load_raw_dataset(config):
     raw_dataset = pd.read_csv(
         os.path.join(output_dir, output_filename),
         delimiter = '\t', quoting = 3)
+    
+    print(f"Loaded raw dataset from {output_dir}")
     return raw_dataset
 
 def _save_vectorizer(cv, config):
@@ -40,6 +42,8 @@ def _save_vectorizer(cv, config):
     os.makedirs(bow_dir, exist_ok=True)
     with open(bow_path, "wb") as f:
         pickle.dump(cv, f)
+
+    print(f"Saved CountVectorizer model in {bow_dir}")
 
 
 def _save_preprocessed_data(X, y, config):
@@ -63,8 +67,7 @@ def _save_preprocessed_data(X, y, config):
     joblib.dump(X, X_path)
     joblib.dump(y, y_path)
 
-    print("Dumped processed dataset")
-    print(f"Size: {X.shape[0]}" )
+    print(f"Saved processed dataset (with {X.shape[0]} samples) in {pre_dir}")
 
 
 def preprocess():

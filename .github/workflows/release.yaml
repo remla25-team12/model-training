@@ -20,5 +20,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            model/Classifier_Sentiment_Model.joblib
-            model/c1_BoW_Sentiment_Model.pkl
+            models/Classifier_Sentiment_Model.joblib
+            models/c1_BoW_Sentiment_Model.pkl

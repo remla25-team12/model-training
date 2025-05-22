@@ -34,7 +34,7 @@ jobs:
 
       - name: Modify DVC Remote
         run: |
-            dvc remote modify myremote --local\
+            dvc remote modify myremote --local \
             gdrive_service_account_json_file_path credentials.json
 
       - name: DVC - Pull models and data

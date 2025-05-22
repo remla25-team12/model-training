@@ -5,26 +5,74 @@ stages:
     deps:
     - path: src/get_data.py
       hash: md5
-      md5: a2834ee9a1abc0553e1a0abbd89d6042
-      size: 761
+      md5: cd168fc8bafa4611e3a6ef4f01cbd30e
+      size: 862
     outs:
-    - path: data/a1_RestaurantReviews_HistoricDump.tsv
+    - path: data/initial_raw
       hash: md5
-      md5: 102f1f4193e0bdebdd6cce7f13e0a839
+      md5: c17d2eb3c40ff9b48cf3b58ecd05c9f4.dir
       size: 54686
+      nfiles: 1
+  process_data:
+    cmd: python src/preprocess_data.py
+    deps:
+    - path: data/initial_raw
+      hash: md5
+      md5: c17d2eb3c40ff9b48cf3b58ecd05c9f4.dir
+      size: 54686
+      nfiles: 1
+    - path: src/preprocess_data.py
+      hash: md5
+      md5: ba275fd8d2aee816709c1f4cdc5aacc9
+      size: 2760
+    outs:
+    - path: data/processed/
+      hash: md5
+      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      size: 10231666
+      nfiles: 2
+    - path: models/c1_BoW_Sentiment_Model.pkl
+      hash: md5
+      md5: b215f4529c95413cfaf5534427e437da
+      size: 39435
   train_model:
     cmd: python src/train_model.py
     deps:
-    - path: data/a1_RestaurantReviews_HistoricDump.tsv
+    - path: data/processed/
       hash: md5
-      md5: 102f1f4193e0bdebdd6cce7f13e0a839
-      size: 54686
+      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      size: 10231666
+      nfiles: 2
+    - path: models/c1_BoW_Sentiment_Model.pkl
+      hash: md5
+      md5: b215f4529c95413cfaf5534427e437da
+      size: 39435
     - path: src/train_model.py
       hash: md5
-      md5: f328282dc5045c3b8c9e8adb09e8eeb1
-      size: 1427
+      md5: bbc6d2ae53452a9b601a8ebb5428294b
+      size: 1481
     outs:
-    - path: model/Classifier_Sentiment_Model.joblib
+    - path: models/Classifier_Sentiment_Model.joblib
       hash: md5
       md5: 7dc6aed243ae2e83d0af2e966804ad5f
       size: 46215
+  eval_model:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/
+      hash: md5
+      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      size: 10231666
+      nfiles: 2
+    - path: models/Classifier_Sentiment_Model.joblib
+      hash: md5
+      md5: 7dc6aed243ae2e83d0af2e966804ad5f
+      size: 46215
+    - path: models/c1_BoW_Sentiment_Model.pkl
+      hash: md5
+      md5: b215f4529c95413cfaf5534427e437da
+      size: 39435
+    - path: src/evaluate.py
+      hash: md5
+      md5: c5135691c30da99e0af3f1ff38b0fb29
+      size: 1283

@@ -30,15 +30,17 @@ jobs:
       run: |
         flake8 .
     
-    - name: Run pylint
+    - name: Run pylint and extract score
       run: |
-        PYTHONPATH=$(pwd) pylint $(git ls-files '*.py')
+        PYLINTRC_PATH=$(pwd)/.pylintrc  # Optional, if you have one
+        pylint src --score=y --output-format=json > pylint_report.json
+        SCORE=$(python -c "import json; r=json.load(open('pylint_report.json')); print(round(r['score'], 1))")
         
-    - name: Add pylint badges to README
-      uses: Silleellie/pylint-github-action@v2.1
-      with:
-        lint-path: src
-        python-version: 3.9
+        # Generate badge markdown
+        BADGE="![pylint](https://img.shields.io/badge/Pylint-${SCORE}-blue?logo=python&logoColor=white)"
+        
+        # Update README.md
+        sed -i "/!\[pylint\]/c\\${BADGE}" README.md
 
     - name: Run tests with coverage and adequacy metrics
       run: |

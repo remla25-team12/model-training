@@ -54,8 +54,8 @@ jobs:
         TEST_SCORE=$(python -c "import json; f=open('test_adequacy_scores.json'); data=json.load(f); total=sum(cat['score']*100 for cat in data.values()); print(f'{total:.1f}')")
         
         # Update README badges
-        sed -i "s|!\[coverage\].*|![coverage](https://img.shields.io/badge/coverage-${COVERAGE}%25-${COVERAGE_COLOR}?logo=python\&logoColor=white)|" README.md
-        sed -i "s|!\[test_score\].*|![test_score](https://img.shields.io/badge/ML%20Test%20Score-${TEST_SCORE}%25-${TEST_SCORE_COLOR}?logo=pytest)|" README.md
+        sed -i "s|!\[coverage\].*|![coverage](https://img.shields.io/badge/Coverage-${COVERAGE}-yellow?logo=python\&logoColor=white)|" README.md
+        sed -i "s|!\[test_score\].*|![test_score](https://img.shields.io/badge/ML_Test_Score-${TEST_SCORE}-yellow?logo=pytest)|" README.md
         
     - name: Commit changes
       run: |

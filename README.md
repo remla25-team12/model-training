@@ -13,7 +13,11 @@ All training code can be found under `src`. Note that the actual preprocessing l
 - Python 3.9 or higher with pip
 
 ## Install and run
-1. Clone this repository:
+1. Clone this repository and navigate into the root folder:
+   ```bash
+   git clone https://github.com/remla25-team12/model-training.git
+   cd model-training
+   ```
 
 2. Install the required Python packages:
    ```bash
@@ -21,18 +25,18 @@ All training code can be found under `src`. Note that the actual preprocessing l
    ```
    > We HIGHLY recommend using a virtual environment, such as `venv` or `conda`, to avoid conflicts with your own Python environments.
 
-3. Link Google Drive as remote storage location. For ease of use, we will instruct you to set up a Service Account instead of OAuth.
+3. Link Google Drive as remote storage location in DVC. For ease of use, we will instruct you to set up a Service Account instead of OAuth.
    1. In Google Cloud Console, create a [Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating). 
       1. In Step 1, after choosing a name and ID, **take note of the email address shown**, then press `Create and continue`\
-      ![alt text](image.png)
+      ![alt text](imgs/sa_email.png)
       2. In Step 2, select the `owner` role, then click `Continue`
       3. In Step 3, add your own Google Account email address to _both_ role fields, then click `Done`
    2. Click on the email address and go to the `Keys` tab. Click `Add Key > Create New Key > JSON >  Create`. 
-   ![alt text](image-2.png)
+   ![Add key for service account](imgs/sa_key.png)
    3. A `.json` file will be downloaded automatically. Rename it to `gdrive_sa_credentials.json` and store it in this repo's root folder.
    4. In Google Drive, create a folder you want to use as your remote storage. 
-   5. Share this folder with the email address associated with the Service Account created earlier. 
-   6. Navitage into the folder and take note of the `folder ID`.
+Share this folder with the email address associated with the Service Account created earlier. 
+   6. Navitage into the folder and **take note of the folder ID**.
    ![Google Drive folder ID](imgs/gdrive_folder_id.png)
    7. Run the following commands to initialize the remote Google Drive storage in DVC:
       ```bash
@@ -40,7 +44,7 @@ All training code can be found under `src`. Note that the actual preprocessing l
       dvc remote default myremote
       dvc remote modify myremote gdrive_acknowledge_abuse true
       dvc remote modify myremote gdrive_use_service_account true
-      dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json
+      dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json # The Service Account key downloaded earlier
       ```
 
 ## Training the model

@@ -116,5 +116,5 @@ Project specific:
 
 # Model Training
 ![pylint](https://img.shields.io/badge/PyLint-9.11-yellow?logo=python&logoColor=white)
-![coverage](https://img.shields.io/badge/coverage-95%25-?logo=python&logoColor=white)
-![test_score](https://img.shields.io/badge/ML%20Test%20Score-97.9%25-?logo=pytest)
+![coverage](https://img.shields.io/badge/Coverage-95-yellow?logo=python&logoColor=white)
+![test_score](https://img.shields.io/badge/ML_Test_Score-97.9-yellow?logo=pytest)

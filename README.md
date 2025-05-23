@@ -1,11 +1,13 @@
 # Model Training
 ![pylint](https://img.shields.io/badge/PyLint-9.11-yellow?logo=python&logoColor=white)
+![coverage](https://img.shields.io/badge/coverage-95%25-?logo=python&logoColor=white)
+![test_score](https://img.shields.io/badge/ML%20Test%20Score-97.9%25-?logo=pytest)
 
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application. 
 
 The stucture of this repository was inspired by the [Cookiecutter template](https://github.com/drivendataorg/cookiecutter-data-science/tree/master).  
 
-All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has been factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
+All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has ben factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
 
 # Getting started
 ## Requirements
@@ -113,8 +115,5 @@ This command will:
 Project specific:
 1. Naming: Add the relevant good names, including use of X, X_train, X_test etc, as they are informative in ML training.
 
-
-# Model Training
-![pylint](https://img.shields.io/badge/PyLint-9.11-yellow?logo=python&logoColor=white)
-![coverage](https://img.shields.io/badge/Coverage-95-yellow?logo=python&logoColor=white)
-![test_score](https://img.shields.io/badge/ML_Test_Score-97.9-yellow?logo=pytest)
+## Use of Generative AI:
+GitHub Copilot was used to understand and write the pytest cases for model-training.

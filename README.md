@@ -1,5 +1,5 @@
 # Model Training
-![pylint](https://img.shields.io/badge/PyLint-9.14-yellow?logo=python&logoColor=white)
+![pylint](https://img.shields.io/badge/PyLint-9.11-yellow?logo=python&logoColor=white)
 
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application. 
 
@@ -111,6 +111,6 @@ Project specific:
 
 
 # Model Training
-![pylint](https://img.shields.io/badge/PyLint-9.14-yellow?logo=python&logoColor=white)
+![pylint](https://img.shields.io/badge/PyLint-9.11-yellow?logo=python&logoColor=white)
 ![coverage](https://img.shields.io/badge/coverage-0%25-red?logo=python&logoColor=white)
 ![test_score](https://img.shields.io/badge/ML%20Test%20Score-0%25-red?logo=pytest)

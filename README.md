@@ -2,7 +2,7 @@
 
 ![pylint](https://img.shields.io/badge/PyLint-9.05-yellow?logo=python&logoColor=white)
 ![coverage](https://img.shields.io/badge/Coverage-97-yellow?logo=python&logoColor=white)
-![test_score](https://img.shields.io/badge/ML_Test_Score-98.8-yellow?logo=pytest)
+![test_score](https://img.shields.io/badge/ML_Test_Score-98.7-yellow?logo=pytest)
 
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application.
 

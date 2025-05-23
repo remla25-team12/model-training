@@ -33,7 +33,7 @@ stages:
       nfiles: 2
     - path: models/c1_BoW_Sentiment_Model.pkl
       hash: md5
-      md5: b215f4529c95413cfaf5534427e437da
+      md5: 348ef4562e26149fb2f7d3ca5df24cf9
       size: 39435
   train_model:
     cmd: python src/train_model.py
@@ -70,7 +70,7 @@ stages:
       size: 46215
     - path: models/c1_BoW_Sentiment_Model.pkl
       hash: md5
-      md5: b215f4529c95413cfaf5534427e437da
+      md5: 348ef4562e26149fb2f7d3ca5df24cf9
       size: 39435
     - path: src/evaluate.py
       hash: md5

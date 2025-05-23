@@ -1,13 +1,13 @@
 stages:
   get_data:
-    cmd: python src/get_data.py
+    cmd: python3 -m src.get_data
     deps:
     - src/get_data.py
     outs:
     - data/initial_raw # Raw data
 
   process_data:
-    cmd: python src/preprocess_data.py
+    cmd: python3 -m src.preprocess_data
     deps:
     - src/preprocess_data.py
     - data/initial_raw # Raw data
@@ -16,7 +16,7 @@ stages:
     - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
 
   train_model:
-    cmd: python src/train_model.py
+    cmd: python3 -m src.train_model
     deps:
     - src/train_model.py
     - data/processed/ # Processed data
@@ -24,7 +24,7 @@ stages:
     - models/Classifier_Sentiment_Model.joblib # Classifier
   
   eval_model:
-    cmd: python src/evaluate.py
+    cmd: python3 -m src.evaluate
     deps:
     - src/evaluate.py
     - data/processed/ # Processed data

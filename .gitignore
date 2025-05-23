@@ -4,5 +4,6 @@ __pycache__/
 *$py.class
 
 *.tsv
-.dvc/
 .idea/
+secrets/
+gdrive_sa_credentials.json

@@ -5,7 +5,7 @@ This repository contains the DVC-powered machine learning pipeline for training 
 
 The stucture of this repository was inspired by the [Cookiecutter template](https://github.com/drivendataorg/cookiecutter-data-science/tree/master).  
 
-All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has ben factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
+All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has been factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
 
 # Getting started
 ## Requirements
@@ -66,8 +66,56 @@ dvc pull
 ## Training configuration and parameters
 TODO explain the config.yaml and what people may want to play with while training.
    
+### Code Formatting and Style
+1. Run Black (code formatter):
+   ```bash
+   black src/
+   ```
+
+2. Run isort (import sorter):
+   ```bash
+   isort src/
+   ```
+
+3. Run autopep8:
+   ```bash
+   autopep8 --in-place --recursive src/
+   ```
+
+4. Run Flake8 (style guide enforcement):
+   ```bash
+   flake8 src/
+   ```
+
+5. Run PyLint with custom rules (including nan-check):
+```bash
+pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
+```
+## Testing
+### Basic Testing
+Run the tests using pytest:
+```bash
+pytest tests/
+```
+
+### Full Test Suite with Coverage and Metrics
+Run the complete test suite with coverage and ML test adequacy metrics:
+```bash
+python tests/run_tests.py
+```
+
+This command will:
+- Run all tests
+- Generate coverage reports
+- Calculate ML test adequacy scores
 
 ## Linting
 ### PyLint
 Project specific:
 1. Naming: Add the relevant good names, including use of X, X_train, X_test etc, as they are informative in ML training.
+
+
+# Model Training
+![pylint](https://img.shields.io/badge/PyLint-9.14-yellow?logo=python&logoColor=white)
+![coverage](https://img.shields.io/badge/coverage-0%25-red?logo=python&logoColor=white)
+![test_score](https://img.shields.io/badge/ML%20Test%20Score-0%25-red?logo=pytest)

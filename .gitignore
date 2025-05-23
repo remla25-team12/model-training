@@ -13,3 +13,6 @@ gdrive_sa_credentials.json
 coverage.xml
 htmlcov/
 test_adequacy_scores.json
+
+/metrics.json
+

@@ -47,25 +47,14 @@ def evaluate_model():
 
     # Evaluate model performance on the test set
     y_pred = classifier.predict(X_test)
-    report = classification_report(y_test, y_pred)
+    report = classification_report(y_test, y_pred, output_dict=True)
 
     print("--- Evaluation results: ---")
     print(report)
+    
+    with open("metrics.json", "w",encoding="utf-8") as f:
+      json.dump(report, f, indent=4)
 
-    # Ensure metrics directory exists
-    metrics_dir = "data/model_eval"
-    os.makedirs(metrics_dir, exist_ok=True)
-    metrics_file = os.path.join(metrics_dir, "metrics.json")
-
-    try:
-        with open(metrics_file, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=4)
-    except PermissionError as exc:
-        raise PermissionError(
-            f"Cannot write metrics file at {metrics_file}. Check permissions."
-        ) from exc
-    except OSError as exc:
-        raise OSError(f"Error writing metrics file: {str(exc)}") from exc
 
 
 if __name__ == "__main__":

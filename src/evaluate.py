@@ -51,10 +51,9 @@ def evaluate_model():
 
     print("--- Evaluation results: ---")
     print(report)
-    
-    with open("metrics.json", "w",encoding="utf-8") as f:
-      json.dump(report, f, indent=4)
 
+    with open("metrics.json", "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=4)
 
 
 if __name__ == "__main__":

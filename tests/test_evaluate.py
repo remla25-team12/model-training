@@ -103,19 +103,15 @@ def test_evaluate_model_success(
     # Run evaluation
     evaluate_model()
 
-    # Check if metrics file was created
-    metrics_file = "data/model_eval/metrics.json"
-    assert os.path.exists(metrics_file)
-
     # Load and verify metrics
-    with open(metrics_file, "r", encoding="utf-8") as f:
+    with open("metrics.json", "r", encoding="utf-8") as f:
         metrics = json.load(f)
 
     # Since we used a perfect separation dataset, accuracy should be 1.0
-    assert "1.0" in metrics  # Perfect accuracy
-    assert "precision" in metrics.lower()
-    assert "recall" in metrics.lower()
-    assert "f1-score" in metrics.lower()
+    assert metrics["accuracy"] == 1.0  # Perfect accuracy
+    assert "precision" in metrics["macro avg"]
+    assert "recall" in metrics["macro avg"]
+    assert "f1-score" in metrics["macro avg"]
 
 
 @patch("src.evaluate.load_preprocessed_data")
@@ -155,12 +151,12 @@ def test_evaluate_model_with_imperfect_data(
     evaluate_model()
 
     # Check metrics
-    with open("data/model_eval/metrics.json", "r", encoding="utf-8") as f:
+    with open("metrics.json", "r", encoding="utf-8") as f:
         metrics = json.load(f)
 
     # Should have exactly 0% accuracy since we designed the test data
     # to be classified opposite to the true labels
-    assert "accuracy                           0.00" in metrics
+    assert metrics["accuracy"] == 0.0
 
 
 @patch("src.evaluate.load_preprocessed_data")

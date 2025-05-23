@@ -1,5 +1,3 @@
-import pytest
-
 from src.configure_loader import load_config
 
 

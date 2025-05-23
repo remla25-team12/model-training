@@ -1,12 +1,14 @@
 # tests/conftest.py
 import os
-import pytest
-import numpy as np
-from omegaconf import OmegaConf
+
 import joblib
+import numpy as np
+import pytest
+from omegaconf import OmegaConf
 from sklearn.naive_bayes import GaussianNB
-from src.utils import load_preprocessed_data
-from src.utils import load_classifier
+
+from src.utils import load_classifier, load_preprocessed_data
+
 
 @pytest.fixture
 def test_config():

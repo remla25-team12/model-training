@@ -34,7 +34,8 @@ def download_data(config=None):
                 print("Dataset downloaded successfully.")
         else:
             print(
-                f"Failed to download the dataset with status code: {response.status_code}"
+                f"Failed to download the dataset with status code: \
+                {response.status_code}"
             )
     except requests.exceptions.Timeout:
         print("Request timed out while downloading the dataset")

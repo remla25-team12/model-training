@@ -1,11 +1,11 @@
+import json
 import sys
 import time
-import json
 from collections import defaultdict
 from pathlib import Path
-import pytest
+
 import psutil
-import numpy as np
+import pytest
 from coverage import Coverage
 
 

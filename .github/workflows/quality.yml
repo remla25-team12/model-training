@@ -26,10 +26,6 @@ jobs:
       run: |
         isort . --check-only --diff
     
-    - name: Run autopep8
-      run: |
-        autopep8 --recursive --diff .
-    
     - name: Run flake8
       run: |
         flake8 .

@@ -77,17 +77,12 @@ TODO explain the config.yaml and what people may want to play with while trainin
    isort src/
    ```
 
-3. Run autopep8:
-   ```bash
-   autopep8 --in-place --recursive src/
-   ```
-
-4. Run Flake8 (style guide enforcement):
+3. Run Flake8 (style guide enforcement):
    ```bash
    flake8 src/
    ```
 
-5. Run PyLint with custom rules (including nan-check):
+4. Run PyLint with custom rules (including nan-check):
 ```bash
 pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
 ```

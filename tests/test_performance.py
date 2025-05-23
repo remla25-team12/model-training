@@ -1,8 +1,7 @@
 # tests/test_performance.py
 import time
-import pytest
+
 import psutil
-import numpy as np
 
 
 def get_memory_usage():

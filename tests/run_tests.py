@@ -76,7 +76,7 @@ class MLTestScore:
             "--cov=src",
             "--cov-report=term-missing",
             "--cov-report=xml",
-            "tests/"
+            "tests/",
         ]
         exit_code = pytest.main(pytest_args)
 
@@ -88,7 +88,7 @@ class MLTestScore:
         cov = Coverage()
         if Path(".coverage").exists():
             cov.load()
-            
+
             # Calculate metrics for each category
             for category, info in self.CATEGORIES.items():
                 category_results = self.results[category]
@@ -96,7 +96,9 @@ class MLTestScore:
                 # Calculate test results
                 test_files = [f for f in info["files"] if Path("tests/" + f).exists()]
                 category_results["total_tests"] = len(test_files)
-                category_results["passed_tests"] = len(test_files) if exit_code == 0 else 0
+                category_results["passed_tests"] = (
+                    len(test_files) if exit_code == 0 else 0
+                )
 
                 # Add performance metrics
                 category_results["performance"] = {
@@ -113,7 +115,8 @@ class MLTestScore:
                 # Calculate final score
                 if category_results["total_tests"] > 0:
                     test_score = (
-                        category_results["passed_tests"] / category_results["total_tests"]
+                        category_results["passed_tests"]
+                        / category_results["total_tests"]
                     )
                     coverage_score = category_results["coverage"] / 100.0
                     category_results["score"] = (

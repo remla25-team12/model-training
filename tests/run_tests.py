@@ -64,55 +64,61 @@ class MLTestScore:
                 "performance": {},
             }
         )
-        self.cov = Coverage()
 
     def run_tests(self):
         """Run all tests and collect results"""
-        # Start coverage measurement
-        self.cov.start()
-
         start_time = time.time()
         initial_memory = get_memory_usage()
 
-        # Run tests with pytest
-        pytest_args = ["--verbose", "--cov=src", "--cov-report=term-missing", "tests/"]
+        # Run tests with pytest and coverage
+        pytest_args = [
+            "--verbose",
+            "--cov=src",
+            "--cov-report=term-missing",
+            "--cov-report=xml",
+            "tests/"
+        ]
         exit_code = pytest.main(pytest_args)
 
         # Collect performance metrics
         end_time = time.time()
         final_memory = get_memory_usage()
 
-        # Stop coverage measurement
-        self.cov.stop()
-        self.cov.save()
+        # Read coverage data from the XML report
+        cov = Coverage()
+        if Path(".coverage").exists():
+            cov.load()
+            
+            # Calculate metrics for each category
+            for category, info in self.CATEGORIES.items():
+                category_results = self.results[category]
 
-        # Calculate metrics for each category
-        for category, info in self.CATEGORIES.items():
-            category_results = self.results[category]
+                # Calculate test results
+                test_files = [f for f in info["files"] if Path("tests/" + f).exists()]
+                category_results["total_tests"] = len(test_files)
+                category_results["passed_tests"] = len(test_files) if exit_code == 0 else 0
 
-            # Calculate test results
-            test_files = [f for f in info["files"] if Path("tests/" + f).exists()]
-            category_results["total_tests"] = len(test_files)
-            category_results["passed_tests"] = len(test_files) if exit_code == 0 else 0
+                # Add performance metrics
+                category_results["performance"] = {
+                    "execution_time": end_time - start_time,
+                    "memory_usage": final_memory - initial_memory,
+                }
 
-            # Add performance metrics
-            category_results["performance"] = {
-                "execution_time": end_time - start_time,
-                "memory_usage": final_memory - initial_memory,
-            }
+                # Calculate coverage
+                try:
+                    category_results["coverage"] = cov.report(include="src/*")
+                except:
+                    category_results["coverage"] = 0.0
 
-            # Calculate coverage
-            category_results["coverage"] = self.cov.report(include="src/*")
-
-            # Calculate final score
-            if category_results["total_tests"] > 0:
-                test_score = (
-                    category_results["passed_tests"] / category_results["total_tests"]
-                )
-                coverage_score = category_results["coverage"] / 100.0
-                category_results["score"] = (
-                    (test_score * 0.6) + (coverage_score * 0.4)
-                ) * info["weight"]
+                # Calculate final score
+                if category_results["total_tests"] > 0:
+                    test_score = (
+                        category_results["passed_tests"] / category_results["total_tests"]
+                    )
+                    coverage_score = category_results["coverage"] / 100.0
+                    category_results["score"] = (
+                        (test_score * 0.6) + (coverage_score * 0.4)
+                    ) * info["weight"]
 
         return exit_code
 

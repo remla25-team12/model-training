@@ -1,5 +1,7 @@
 # Model Training
-![pylint](https://img.shields.io/badge/PyLint-9.14-yellow?logo=python&logoColor=white)
+![pylint](https://img.shields.io/badge/PyLint-9.06-yellow?logo=python&logoColor=white)
+![coverage](https://img.shields.io/badge/Coverage-97-yellow?logo=python&logoColor=white)
+![test_score](https://img.shields.io/badge/ML_Test_Score-98.8-yellow?logo=pytest)
 
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application. 
 
@@ -70,8 +72,48 @@ dvc pull
 ## Training configuration and parameters
 TODO explain the config.yaml and what people may want to play with while training.
    
+### Code Formatting and Style
+1. Run Black (code formatter):
+   ```bash
+   black src/
+   ```
+
+2. Run isort (import sorter):
+   ```bash
+   isort src/
+   ```
+
+3. Run Flake8 (style guide enforcement):
+   ```bash
+   flake8 src/
+   ```
+
+4. Run PyLint with custom rules (including nan-check):
+```bash
+pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
+```
+## Testing
+### Basic Testing
+Run the tests using pytest:
+```bash
+pytest tests/
+```
+
+### Full Test Suite with Coverage and Metrics
+Run the complete test suite with coverage and ML test adequacy metrics:
+```bash
+python tests/run_tests.py
+```
+
+This command will:
+- Run all tests
+- Generate coverage reports
+- Calculate ML test adequacy scores
 
 ## Linting
 ### PyLint
 Project specific:
 1. Naming: Add the relevant good names, including use of X, X_train, X_test etc, as they are informative in ML training.
+
+## Use of Generative AI:
+GitHub Copilot was used to understand and write the pytest cases for model-training.

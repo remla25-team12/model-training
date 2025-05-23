@@ -4,37 +4,54 @@ Preprocesses the training data using the libml package
 
 import os
 import pickle
-import pandas as pd
+
 import joblib
 import libml
-import configure_loader
+import pandas as pd
+
+from src import configure_loader
+
 
 def _load_raw_dataset(config):
     """
     Load the raw, unprocessed dataset according to the settings specified in the config
-    
-    Args: 
+
+    Args:
         config (dict): See config.yaml for contents)
-    Returns: 
+    Returns:
         raw_dataset (pd.DataFrame): The raw, unprocessed dataset
+    Raises:
+        FileNotFoundError: If the raw dataset file doesn't exist
     """
     output_dir = config["dataset"]["raw"]["output_dir"]
     output_filename = config["dataset"]["raw"]["output_filename"]
-    raw_dataset = pd.read_csv(
-        os.path.join(output_dir, output_filename),
-        delimiter = '\t', quoting = 3)
+    file_path = os.path.join(output_dir, output_filename)
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Raw dataset not found at {file_path}")
+
+    raw_dataset = pd.read_csv(file_path, delimiter="\t", quoting=3)
 
     print(f"Loaded raw dataset from {output_dir}")
     return raw_dataset
+
 
 def _save_vectorizer(cv, config):
     """
     Save the vectorizer according to the settings specified in the config
 
-    Args: 
-        - cv (CountVectorizer)
+    Args:
+        - cv (CountVectorizer): Must be a fitted CountVectorizer instance
         - config (dict): See config.yaml for contents
+    Raises:
+        AttributeError: If cv is not a valid CountVectorizer instance
     """
+    # Verify it's a valid vectorizer
+    if not hasattr(cv, "vocabulary_"):
+        raise AttributeError(
+            "Invalid vectorizer: must be a fitted CountVectorizer instance"
+        )
+
     bow_dir = config["model"]["count_vectorizer"]["bow_dir"]
     bow_filename = config["model"]["count_vectorizer"]["bow_filename"]
     bow_path = os.path.join(bow_dir, bow_filename)
@@ -54,7 +71,14 @@ def _save_preprocessed_data(X, y, config):
         X (numpy.ndarray): Input features
         y (numpy.ndarray): Labels corresponding to the input features
         config (dict): See config.yaml for contents
+    Raises:
+        ValueError: If X and y shapes are incompatible
     """
+    if len(X) != len(y):
+        raise ValueError(
+            f"Incompatible shapes: X has {len(X)} samples but y has {len(y)} samples"
+        )
+
     pre_dir = config["dataset"]["preprocessed"]["output_dir"]
     X_filename = config["dataset"]["preprocessed"]["X_filename"]
     y_filename = config["dataset"]["preprocessed"]["y_filename"]
@@ -74,7 +98,7 @@ def preprocess():
     """
     Main function for preprocessesing the training data
     """
-    # Intiial step: load configs
+    # Initial step: load configs
     config = configure_loader.load_config()
 
     # Step 1: Load the raw dataset

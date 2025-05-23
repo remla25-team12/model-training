@@ -9,6 +9,7 @@ dataset:
     y_filename: "y.joblib"
 
 model:
+  type: "GaussianNB"
   count_vectorizer:
     bow_dir: "./models"
     bow_filename: "c1_BoW_Sentiment_Model.pkl"

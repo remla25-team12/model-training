@@ -7,4 +7,12 @@ __pycache__/
 .idea/
 secrets/
 gdrive_sa_credentials.json
+
+# Coverage files
+.coverage
+coverage.xml
+htmlcov/
+test_adequacy_scores.json
+
 /metrics.json
+

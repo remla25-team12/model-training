@@ -1,0 +1,66 @@
+name: Python Code Quality & Tests
+on: [push]
+permissions:
+  contents: write
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run black
+      run: |
+        black . --check
+    
+    - name: Run isort
+      run: |
+        isort . --check-only --diff
+    
+    - name: Run flake8
+      run: |
+        flake8 .
+    
+    - name: Run pylint
+      run: |
+        PYTHONPATH=$(pwd) pylint $(git ls-files '*.py')
+        
+    - name: Add pylint badges to README
+      uses: Silleellie/pylint-github-action@v2.1
+      with:
+        lint-path: src
+        python-version: 3.9
+
+    - name: Run tests with coverage and adequacy metrics
+      run: |
+        python tests/run_tests.py
+        
+    - name: Update README with test metrics
+      run: |
+        # Extract coverage from .coverage file
+        coverage report > coverage_report.txt
+        COVERAGE=$(grep "TOTAL" coverage_report.txt | awk '{print $4}' | sed 's/%//')
+        
+        # Get test adequacy score from JSON
+        TEST_SCORE=$(python -c "import json; f=open('test_adequacy_scores.json'); data=json.load(f); total=sum(cat['score']*100 for cat in data.values()); print(f'{total:.1f}')")
+        
+        # Update README badges
+        sed -i "s|!\[coverage\].*|![coverage](https://img.shields.io/badge/Coverage-${COVERAGE}-yellow?logo=python\&logoColor=white)|" README.md
+        sed -i "s|!\[test_score\].*|![test_score](https://img.shields.io/badge/ML_Test_Score-${TEST_SCORE}-yellow?logo=pytest)|" README.md
+        
+    - name: Commit changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add README.md
+        git commit -m "Update test metrics badges" || echo "No changes to commit"
+        git push

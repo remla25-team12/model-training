@@ -32,14 +32,14 @@ jobs:
     
     - name: Run pylint and extract score
       run: |
-        PYLINTRC_PATH=$(pwd)/.pylintrc  # Optional, if you have one
-        pylint src --score=y --output-format=json > pylint_report.json
-        SCORE=$(python -c "import json; r=json.load(open('pylint_report.json')); print(round(r['score'], 1))")
-        
-        # Generate badge markdown
-        BADGE="![pylint](https://img.shields.io/badge/Pylint-${SCORE}-blue?logo=python&logoColor=white)"
-        
-        # Update README.md
+        pylint src --score=y > pylint_output.txt || true
+        SCORE=$(grep "Your code has been rated at" pylint_output.txt | awk '{print $7}' | cut -d'/' -f1)
+        SCORE_CLEAN=$(printf "%.1f" "$SCORE")
+
+        # Create badge
+        BADGE="![pylint](https://img.shields.io/badge/Pylint-${SCORE_CLEAN}-blue?logo=python&logoColor=white)"
+
+        # Update README
         sed -i "/!\[pylint\]/c\\${BADGE}" README.md
 
     - name: Run tests with coverage and adequacy metrics

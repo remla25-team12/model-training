@@ -48,8 +48,8 @@ def evaluate_model():
     y_pred = classifier.predict(X_test)
     report = classification_report(y_test, y_pred, output_dict=True)
 
-    print("--- Evaluation results: ---")
-    print(report)
+    # print("--- Evaluation results: ---")
+    # print(report)
 
     with open("metrics.json", "w", encoding="utf-8") as f:
         json.dump(report, f, indent=4)

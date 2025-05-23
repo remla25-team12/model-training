@@ -30,7 +30,7 @@ jobs:
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
-          echo $GDRIVE_CREDENTIALS_DATA > gdrive_sa_credentials.json.json
+          echo $GDRIVE_CREDENTIALS_DATA > gdrive_sa_credentials.json
 
       - name: Initialize DVC if needed
         run: |
@@ -45,7 +45,7 @@ jobs:
             dvc remote modify myremote gdrive_acknowledge_abuse true
             dvc remote modify myremote gdrive_use_service_account true
             dvc remote modify myremote --local \
-            gdrive_service_account_json_file_path gdrive_sa_credentials.json.json
+            gdrive_service_account_json_file_path gdrive_sa_credentials.json
 
       - name: Pull models and data
         run: dvc pull

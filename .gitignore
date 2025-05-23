@@ -7,3 +7,4 @@ __pycache__/
 .idea/
 secrets/
 gdrive_sa_credentials.json
+/metrics.json

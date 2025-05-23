@@ -28,7 +28,7 @@ def evaluate_model():
 
     # Evaluate model performance on the test set
     y_pred = classifier.predict(X_test)
-    report = classification_report(y_test, y_pred)
+    report = classification_report(y_test, y_pred, output_dict=True)
 
 
     print("--- Evaluation results: ---")

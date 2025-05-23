@@ -1,12 +1,12 @@
 schema: '2.0'
 stages:
   get_data:
-    cmd: python src/get_data.py
+    cmd: python3 -m src.get_data
     deps:
     - path: src/get_data.py
       hash: md5
-      md5: 88866dbaf5c36afefdb00ebd8f3e4faa
-      size: 1346
+      md5: 40227cf93a8007e243be95548526abfc
+      size: 1299
     outs:
     - path: data/initial_raw
       hash: md5
@@ -14,7 +14,7 @@ stages:
       size: 54686
       nfiles: 1
   process_data:
-    cmd: python src/preprocess_data.py
+    cmd: python3 -m src.preprocess_data
     deps:
     - path: data/initial_raw
       hash: md5
@@ -23,57 +23,57 @@ stages:
       nfiles: 1
     - path: src/preprocess_data.py
       hash: md5
-      md5: ed9e66b74de3357b497e903e21081f77
-      size: 3609
+      md5: 64882774b098fb3d03e57fb5e8610e8b
+      size: 3490
     outs:
     - path: data/processed/
       hash: md5
-      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      md5: 5b10cda7e1cc32ad4795a50116fc45e9.dir
       size: 10231666
       nfiles: 2
     - path: models/c1_BoW_Sentiment_Model.pkl
       hash: md5
-      md5: 6b56d23bb1c9271685f99aea16e2b050
-      size: 39435
+      md5: ef328854acbaaed80717b8b23b08a29b
+      size: 39450
   train_model:
-    cmd: python src/train_model.py
+    cmd: python3 -m src.train_model
     deps:
     - path: data/processed/
       hash: md5
-      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      md5: 5b10cda7e1cc32ad4795a50116fc45e9.dir
       size: 10231666
       nfiles: 2
     - path: src/train_model.py
       hash: md5
-      md5: 567efb8eda0d364f713bcf20e86b0888
-      size: 1457
+      md5: 1107cc12c51d4e1547fb9a1d13ff7e6f
+      size: 1407
     outs:
     - path: models/Classifier_Sentiment_Model.joblib
       hash: md5
-      md5: 7dc6aed243ae2e83d0af2e966804ad5f
+      md5: 03138659cb8fe377321cfe7e363f7cc1
       size: 46215
   eval_model:
-    cmd: python src/evaluate.py
+    cmd: python3 -m src.evaluate
     deps:
     - path: data/processed/
       hash: md5
-      md5: 39d92f8722a8b66c83b5741fc9fcfd02.dir
+      md5: 5b10cda7e1cc32ad4795a50116fc45e9.dir
       size: 10231666
       nfiles: 2
     - path: models/Classifier_Sentiment_Model.joblib
       hash: md5
-      md5: 7dc6aed243ae2e83d0af2e966804ad5f
+      md5: 03138659cb8fe377321cfe7e363f7cc1
       size: 46215
     - path: models/c1_BoW_Sentiment_Model.pkl
       hash: md5
-      md5: 6b56d23bb1c9271685f99aea16e2b050
-      size: 39435
+      md5: ef328854acbaaed80717b8b23b08a29b
+      size: 39450
     - path: src/evaluate.py
       hash: md5
-      md5: 4c0018432ba59e02e49b205ec18b72ae
-      size: 1856
+      md5: 8ef2e54fb0a76bef06810abd57ac77cd
+      size: 1790
     outs:
     - path: metrics.json
       hash: md5
-      md5: 133775e0cf3f9a87a43466603c080d03
-      size: 729
+      md5: e1adccc4b012ce5f9e3c61125f9d4da0
+      size: 700

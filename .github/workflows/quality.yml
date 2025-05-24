@@ -6,94 +6,99 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Run black
-      run: |
-        black . --check
-    
-    - name: Run isort
-      run: |
-        isort . --check-only --diff
-    
-    - name: Run flake8
-      run: |
-        flake8 .
-    
-    - name: Run pylint and update badge with dynamic color
-      run: |
-        pylint src --score=y > pylint_output.txt || true
-        SCORE=$(grep "Your code has been rated at" pylint_output.txt | awk '{print $7}' | cut -d'/' -f1)
-        SCORE_CLEAN=$(printf "%.2f" "$SCORE")
+      - uses: actions/checkout@v2
 
-        # Set badge color based on score
-        if (( $(echo "$SCORE >= 9.0" | bc -l) )); then
-          COLOR="brightgreen"
-        elif (( $(echo "$SCORE >= 7.0" | bc -l) )); then
-          COLOR="yellow"
-        else
-          COLOR="red"
-        fi
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-        # Create badge
-        BADGE="![pylint](https://img.shields.io/badge/PyLint-${SCORE_CLEAN}-${COLOR}?logo=python&logoColor=white)"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-        # Update README
-        sed -i "/!\[pylint\]/c\\${BADGE}" README.md
+      - name: Run black
+        run: |
+          black . --check
 
-    - name: Run tests with coverage and adequacy metrics
-      run: |
-        python tests/run_tests.py
-        
-    - name: Update README with test metrics
-      run: |
-        # Extract coverage from .coverage file
-        coverage report > coverage_report.txt
-        COVERAGE=$(grep "TOTAL" coverage_report.txt | awk '{print $4}' | sed 's/%//')
+      - name: Run isort
+        run: |
+          isort . --check-only --diff
 
-        # Get test adequacy score from JSON
-        TEST_SCORE=$(python -c "import json; f=open('test_adequacy_scores.json'); data=json.load(f); total=sum(cat['score']*100 for cat in data.values()); print(f'{total:.1f}')")
+      - name: Run flake8
+        run: |
+          flake8 .
 
-        # Determine badge color for coverage
-        if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
-          COV_COLOR="brightgreen"
-        elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then
-          COV_COLOR="yellow"
-        else
-          COV_COLOR="red"
-        fi
+      - name: Run pylint and update badge with dynamic color
+        run: |
+          pylint src --score=y > pylint_output.txt || true
+          SCORE=$(grep "Your code has been rated at" pylint_output.txt | awk '{print $7}' | cut -d'/' -f1)
+          SCORE_CLEAN=$(printf "%.2f" "$SCORE")
 
-        # Determine badge color for ML Test Score
-        if (( $(echo "$TEST_SCORE >= 90" | bc -l) )); then
-          TEST_COLOR="brightgreen"
-        elif (( $(echo "$TEST_SCORE >= 75" | bc -l) )); then
-          TEST_COLOR="yellow"
-        else
-          TEST_COLOR="red"
-        fi
+          # Set badge color based on score
+          if (( $(echo "$SCORE >= 9.0" | bc -l) )); then
+            COLOR="brightgreen"
+          elif (( $(echo "$SCORE >= 7.0" | bc -l) )); then
+            COLOR="yellow"
+          else
+            COLOR="red"
+          fi
 
-        # Create badges
-        COVERAGE_BADGE="![coverage](https://img.shields.io/badge/Coverage-${COVERAGE}-${COV_COLOR}?logo=python&logoColor=white)"
-        SCORE_BADGE="![test_score](https://img.shields.io/badge/ML_Test_Score-${TEST_SCORE}-${TEST_COLOR}?logo=pytest)"
+          # Create badge
+          BADGE="![pylint](https://img.shields.io/badge/PyLint-${SCORE_CLEAN}-${COLOR}?logo=python&logoColor=white)"
 
-        # Update README.md
-        sed -i "/!\[coverage\]/c\\${COVERAGE_BADGE}" README.md
-        sed -i "/!\[test_score\]/c\\${SCORE_BADGE}" README.md
-        
-    - name: Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add README.md
-        git commit -m "Update test metrics badges" || echo "No changes to commit"
-        git push
+          # Update README
+          sed -i "/!\[pylint\]/c\\${BADGE}" README.md
+
+      - name: Run tests with coverage and adequacy metrics
+        run: |
+          python tests/run_tests.py
+
+      - name: Update README with test metrics
+        run: |
+          # Extract coverage from .coverage file
+          coverage report > coverage_report.txt
+          COVERAGE=$(grep "TOTAL" coverage_report.txt | awk '{print $4}' | sed 's/%//')
+
+          # Get test adequacy score from JSON
+          TEST_SCORE=$(python -c "import json; f=open('test_adequacy_scores.json'); data=json.load(f); total=sum(cat['score']*100 for cat in data.values()); print(f'{total:.1f}')")
+
+          # Determine badge color for coverage
+          if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
+            COV_COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+            COV_COLOR="yellow"
+          else
+            COV_COLOR="red"
+          fi
+
+          # Determine badge color for ML Test Score
+          if (( $(echo "$TEST_SCORE >= 90" | bc -l) )); then
+            TEST_COLOR="brightgreen"
+          elif (( $(echo "$TEST_SCORE >= 75" | bc -l) )); then
+            TEST_COLOR="yellow"
+          else
+            TEST_COLOR="red"
+          fi
+
+          # Create badges
+          COVERAGE_BADGE="![coverage](https://img.shields.io/badge/Coverage-${COVERAGE}-${COV_COLOR}?logo=python&logoColor=white)"
+          SCORE_BADGE="![test_score](https://img.shields.io/badge/ML_Test_Score-${TEST_SCORE}-${TEST_COLOR}?logo=pytest)"
+
+          # Update README.md
+          sed -i "/!\[coverage\]/c\\${COVERAGE_BADGE}" README.md
+          sed -i "/!\[test_score\]/c\\${SCORE_BADGE}" README.md
+
+      - name: Skip badge update on tag push
+        if: startsWith(github.ref, 'refs/tags/')
+        run: echo "Tag push detected — skipping README badge commit."
+
+      - name: Commit badge updates to README
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "Update test metrics badges" || echo "No changes to commit"
+          git push

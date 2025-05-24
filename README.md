@@ -1,4 +1,5 @@
 # Model Training
+
 ![pylint](https://img.shields.io/badge/PyLint-10.00-brightgreen?logo=python&logoColor=white)
 ![coverage](https://img.shields.io/badge/Coverage-97-brightgreen?logo=python&logoColor=white)
 ![test_score](https://img.shields.io/badge/ML_Test_Score-98.7-brightgreen?logo=pytest)
@@ -9,14 +10,14 @@ The stucture of this repository was inspired by the [Cookiecutter template](http
 
 All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has ben factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
 
-# Getting started
+# Getting Started
 
 ## Requirements
 
 - Linux or macOS (recommended operating system)
 - Python 3.9 or higher with pip
 
-## Install and run
+## Install and Run
 
 1. Clone this repository and navigate into the root folder:
 
@@ -55,7 +56,7 @@ All training code can be found under `src`. Note that the actual preprocessing l
       dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json # The Service Account key downloaded earlier
       ```
 
-## Training the model
+## Training the Model
 
 Run the training pipeline with DVC:
 
@@ -80,6 +81,8 @@ These are stored remotely. To download the most recent models from the remote, r
 dvc pull
 ```
 
+> Note that due to problems with querying the Google Drive account too heavily, the `dvc pull` and `dvc push` commands may produce errors. This is an acknowledged problem, but it is purely related to the security management of Google Drive. However, this does not affect the DVC setup, and you can continue running the following commands in the README.
+
 ## Showing Experimental Results
 
 To evaluate and track your machine learning experiments using DVC, you can run the experiments and view their resulting metrics as follows:
@@ -98,7 +101,7 @@ To evaluate and track your machine learning experiments using DVC, you can run t
 
    > This command displays a table of all tracked experiments along with their metrics, parameters, and timestamps.
 
-## Training configuration and parameters
+## Training Configuration and Parameters
 
 TODO explain the config.yaml and what people may want to play with while training.
 

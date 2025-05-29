@@ -1,20 +1,20 @@
 """
-Trains the Naive Bayes Classifier model
+Trains the Logistic Regression model
 """
 
 import os
 
 import joblib
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
 
 from src.configure_loader import load_config
 from src.utils import load_preprocessed_data
 
 
-def train_model():
+def train_alternative_model():
     """
-    Main function for training the Naive Bayes Classifier
+    Trains a Logistic Regression classifier for restaurant sentiment analysis.
     """
     # Load configuration
     config = load_config()
@@ -30,9 +30,9 @@ def train_model():
         X, y, test_size=test_size, random_state=random_state
     )
 
-    # Train and fit a Naive Bayes classifier
-    classifier = GaussianNB()
-    print("Training Naive Bayes classifier...")
+    # Train and fit a Logistic Regression Classifier
+    classifier = LogisticRegression(max_iter=1000)
+    print("Training logistic regression classifier...")
     classifier.fit(X_train, y_train)
 
     # Exporting NB Classifier to later use in prediction
@@ -47,4 +47,4 @@ def train_model():
 
 
 if __name__ == "__main__":
-    train_model()
+    train_alternative_model()

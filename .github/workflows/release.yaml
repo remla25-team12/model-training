@@ -68,10 +68,10 @@ jobs:
       - name: Reproduce pipeline (train model)
         run: dvc repro
 
-      - name: Copy model artifacts from local remote
-        run: |
-          cp ~/remotedvc/models/Classifier_Sentiment_Model.joblib models/
-          cp ~/remotedvc/models/c1_BoW_Sentiment_Model.pkl models/
+      # - name: Copy model artifacts from local remote
+      #   run: |
+      #     cp ~/remotedvc/models/Classifier_Sentiment_Model.joblib models/
+      #     cp ~/remotedvc/models/c1_BoW_Sentiment_Model.pkl models/
 
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2

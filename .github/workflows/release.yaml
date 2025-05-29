@@ -62,7 +62,7 @@ jobs:
       - name: Set up local DVC remote
         run: |
           mkdir -p ~/remotedvc
-          dvc remote add -d mylocalremote ~/remotedvc
+          dvc remote add -f -d mylocalremote ~/remotedvc
           dvc remote default mylocalremote
 
       - name: Reproduce pipeline (train model)

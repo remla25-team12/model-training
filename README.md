@@ -56,6 +56,22 @@ All training code can be found under `src`. Note that the actual preprocessing l
       dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json # The Service Account key downloaded earlier
       ```
 
+## Alternative to Remote Storage: Local Storage
+
+Due to the security management of Google Drive, we recommend using a local storage to test our dvc setup.
+
+Add a local storage:
+
+```bash
+dvc remote add -d mylocalremote ~/remotedvc
+```
+
+Set it as the default:
+
+```bash
+dvc remote default mylocalremote
+```
+
 ## Training the Model
 
 Run the training pipeline with DVC:
@@ -81,7 +97,7 @@ These are stored remotely. To download the most recent models from the remote, r
 dvc pull
 ```
 
-> Note that due to problems with querying the Google Drive account too heavily, the `dvc pull` and `dvc push` commands may produce errors. This is an acknowledged problem, but it is purely related to the security management of Google Drive. However, this does not affect the DVC setup, and you can continue running the following commands in the README.
+> Note that due to problems with querying the Google Drive account too heavily, the `dvc pull` and `dvc push` commands may produce errors when using the remote storage. This is an acknowledged problem, but it is purely related to the security management of Google Drive. However, this does not affect the DVC setup, and you can continue running the following commands in the README.
 
 ## Showing Experimental Results
 

@@ -1,7 +1,7 @@
 name: Release model-training
 
-on: 
-  push: 
+on:
+  push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
@@ -51,6 +51,27 @@ jobs:
 
       # - name: Pull models and data
       #   run: dvc pull
+
+      # DVC steps for local storage
+      - name: Initialize DVC if needed
+        run: |
+          if [ ! -d ".dvc" ]; then
+            dvc init
+          fi
+
+      - name: Set up local DVC remote
+        run: |
+          mkdir -p ~/remotedvc
+          dvc remote add -d mylocalremote ~/remotedvc
+          dvc remote default mylocalremote
+
+      - name: Reproduce pipeline (train model)
+        run: dvc repro
+
+      - name: Copy model artifacts from local remote
+        run: |
+          cp ~/remotedvc/models/Classifier_Sentiment_Model.joblib models/
+          cp ~/remotedvc/models/c1_BoW_Sentiment_Model.pkl models/
 
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2

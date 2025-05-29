@@ -16,10 +16,12 @@ stages:
     - models/c1_BoW_Sentiment_Model.pkl # CountVectorizer
 
   train_model:
-    cmd: python3 -m src.train_alternative_model
+    cmd: python3 -m src.train_model
     deps:
-    - src/train_alternative_model.py
+    - src/train_model.py
     - data/processed/ # Processed data
+    params:
+    - model.is_alternative_model # Type of classifier that is trained is dependent on this parameter
     outs:
     - models/Classifier_Sentiment_Model.joblib # Classifier
   

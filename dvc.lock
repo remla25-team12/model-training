@@ -36,17 +36,20 @@ stages:
       md5: 857e923993debe66922bd96aaf9a6515
       size: 39450
   train_model:
-    cmd: python3 -m src.train_alternative_model
+    cmd: python3 -m src.train_model
     deps:
     - path: data/processed/
       hash: md5
       md5: 5b10cda7e1cc32ad4795a50116fc45e9.dir
       size: 10231666
       nfiles: 2
-    - path: src/train_alternative_model.py
+    - path: src/train_model.py
       hash: md5
-      md5: 047ccf1540f5826b2b8800b0918db188
-      size: 1507
+      md5: dfbde921424c08443ad0df07af96acb3
+      size: 1845
+    params:
+      params.yaml:
+        model.is_alternative_model: true
     outs:
     - path: models/Classifier_Sentiment_Model.joblib
       hash: md5

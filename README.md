@@ -110,19 +110,19 @@ TODO explain the config.yaml and what people may want to play with while trainin
 1. Run Black (code formatter):
 
    ```bash
-   black src/
+   black .
    ```
 
 2. Run isort (import sorter):
 
    ```bash
-   isort src/
+   isort .
    ```
 
 3. Run Flake8 (style guide enforcement):
 
    ```bash
-   flake8 src/
+   flake8 .
    ```
 
 4. Run PyLint with custom rules (including nan-check):

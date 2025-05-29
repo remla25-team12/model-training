@@ -4,12 +4,12 @@ import shutil
 import time
 from unittest.mock import patch
 
-import yaml
 import joblib
 import numpy as np
 import pytest
-from sklearn.naive_bayes import GaussianNB
+import yaml
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 
 from src.configure_loader import load_config
 from src.train_model import train_model
@@ -107,7 +107,9 @@ def test_train_model_success(mock_load_data, sample_data, config):
 
     # Load and verify the saved model
     model = joblib.load(model_path)
-    assert isinstance(model, expected_model), f"Model should be {expected_model.__name__}"
+    assert isinstance(
+        model, expected_model
+    ), f"Model should be {expected_model.__name__}"
     assert hasattr(model, "predict"), "Model should have a predict method"
     assert model.classes_.shape[0] == 2, "Model should be a binary classifier"
 

@@ -1,7 +1,7 @@
 name: Release model-training
 
-on: 
-  push: 
+on:
+  push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
@@ -26,29 +26,52 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Generate GDrive credentials.json from GitHub Secret
-        env:
-          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
-        run: |
-          echo $GDRIVE_CREDENTIALS_DATA > gdrive_sa_credentials.json
+      # Commented out DVC steps and GDrive credentials because of problems with access to Drive
 
+      # - name: Generate GDrive credentials.json from GitHub Secret
+      #   env:
+      #     GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+      #   run: |
+      #     echo $GDRIVE_CREDENTIALS_DATA > gdrive_sa_credentials.json
+
+      # - name: Initialize DVC if needed
+      #   run: |
+      #     if [ ! -d ".dvc" ]; then
+      #       dvc init
+      #     fi
+
+      # - name: Set up DVC Remote
+      #   run: |
+      #       dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f
+      #       dvc remote default myremote
+      #       dvc remote modify myremote gdrive_acknowledge_abuse true
+      #       dvc remote modify myremote gdrive_use_service_account true
+      #       dvc remote modify myremote --local \
+      #       gdrive_service_account_json_file_path gdrive_sa_credentials.json
+
+      # - name: Pull models and data
+      #   run: dvc pull
+
+      # DVC steps for local storage
       - name: Initialize DVC if needed
         run: |
           if [ ! -d ".dvc" ]; then
             dvc init
           fi
 
-      - name: Set up DVC Remote
+      - name: Set up local DVC remote
         run: |
-            dvc remote add myremote gdrive://${{ secrets.GDRIVE_FOLDER_ID }} -f
-            dvc remote default myremote
-            dvc remote modify myremote gdrive_acknowledge_abuse true
-            dvc remote modify myremote gdrive_use_service_account true
-            dvc remote modify myremote --local \
-            gdrive_service_account_json_file_path gdrive_sa_credentials.json
+          mkdir -p ~/remotedvc
+          dvc remote add -f -d mylocalremote ~/remotedvc
+          dvc remote default mylocalremote
 
-      - name: Pull models and data
-        run: dvc pull
+      - name: Reproduce pipeline (train model)
+        run: dvc repro
+
+      # - name: Copy model artifacts from local remote
+      #   run: |
+      #     cp ~/remotedvc/models/Classifier_Sentiment_Model.joblib models/
+      #     cp ~/remotedvc/models/c1_BoW_Sentiment_Model.pkl models/
 
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2

@@ -1,7 +1,9 @@
 [core]
     analytics = false
-    remote = myremote
+    remote = mylocalremote
 ['remote "myremote"']
     url = gdrive://1exGG6_nZb28AAleatZVNwUKWwQdm1Yap
     gdrive_acknowledge_abuse = true
     gdrive_use_service_account = true
+['remote "mylocalremote"']
+    url = /Users/selinceydeli/remotedvc

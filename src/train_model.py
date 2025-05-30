@@ -1,10 +1,12 @@
 """
-Trains the Naive Bayes Classifier model
+Trains a Naive Bayes or Logistic Regression Classifier model
 """
 
 import os
 
 import joblib
+import yaml
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 
@@ -16,6 +18,11 @@ def train_model():
     """
     Main function for training the Naive Bayes Classifier
     """
+    # Load YAML parameter for classifier selection
+    with open("params.yaml", encoding="utf-8") as f:
+        params = yaml.safe_load(f)
+    use_logistic = params["model"]["is_alternative_model"]
+
     # Load configuration
     config = load_config()
 
@@ -30,9 +37,13 @@ def train_model():
         X, y, test_size=test_size, random_state=random_state
     )
 
-    # Train and fit a Naive Bayes classifier
-    classifier = GaussianNB()
-    print("Training classifier...")
+    # Train and fit a classifier
+    if use_logistic:
+        print("Training Logistic Regression classifier...")
+        classifier = LogisticRegression(max_iter=1000)
+    else:
+        print("Training Naive Bayes classifier...")
+        classifier = GaussianNB()
     classifier.fit(X_train, y_train)
 
     # Exporting NB Classifier to later use in prediction

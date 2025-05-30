@@ -1,0 +1,2 @@
+model:
+  is_alternative_model: true  # When true, train an alternative classifier to Naive Bayes Classifier 

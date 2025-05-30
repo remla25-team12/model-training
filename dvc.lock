@@ -45,13 +45,16 @@ stages:
       nfiles: 2
     - path: src/train_model.py
       hash: md5
-      md5: 1107cc12c51d4e1547fb9a1d13ff7e6f
-      size: 1407
+      md5: dfbde921424c08443ad0df07af96acb3
+      size: 1845
+    params:
+      params.yaml:
+        model.is_alternative_model: true
     outs:
     - path: models/Classifier_Sentiment_Model.joblib
       hash: md5
-      md5: 03138659cb8fe377321cfe7e363f7cc1
-      size: 46215
+      md5: f27dd21027f35df525e02e1a625d3a26
+      size: 12223
   eval_model:
     cmd: python3 -m src.evaluate
     deps:
@@ -62,8 +65,8 @@ stages:
       nfiles: 2
     - path: models/Classifier_Sentiment_Model.joblib
       hash: md5
-      md5: 03138659cb8fe377321cfe7e363f7cc1
-      size: 46215
+      md5: f27dd21027f35df525e02e1a625d3a26
+      size: 12223
     - path: models/c1_BoW_Sentiment_Model.pkl
       hash: md5
       md5: 857e923993debe66922bd96aaf9a6515
@@ -75,5 +78,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: e1adccc4b012ce5f9e3c61125f9d4da0
-      size: 700
+      md5: 96c3515eade5a1e48ee2cf14d2e10bff
+      size: 702

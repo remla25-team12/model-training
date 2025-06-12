@@ -1,17 +1,62 @@
-name: Release model-training
+name: Auto Bump Patch + Release Model Training
 
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
-  build-and-release-model:
+  bump-build-release:
+    if: ${{ !contains(github.event.head_commit.message, 'Bump version to') }}
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Fetch tags and bump patch version
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "Latest tag: $LATEST_TAG"
+
+          if [ -z "$LATEST_TAG" ]; then
+            NEW_TAG="v0.0.1"
+          else
+            VERSION=${LATEST_TAG#v}
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+            NEW_TAG="v$MAJOR.$MINOR.$((PATCH + 1))"
+          fi
+
+          NEW_VERSION=${NEW_TAG#v}
+          echo "$NEW_VERSION" > version.txt
+          git add version.txt
+          git commit -m "Update version.txt to $NEW_VERSION"
+          git push origin main
+          git tag "$NEW_TAG"
+          git push origin "$NEW_TAG"
+
+      - name: Set version env
+        id: parse-version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+  build-and-release-model:
+    needs: bump-build-release
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,7 +71,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # DVC steps for local storage
       - name: Initialize DVC if needed
         run: |
           if [ ! -d ".dvc" ]; then
@@ -41,10 +85,54 @@ jobs:
 
       - name: Reproduce pipeline (train model)
         run: dvc repro
-        
+
       - name: Upload trained model to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.version }}
+          generate_release_notes: true
           files: |
             models/Classifier_Sentiment_Model.joblib
             models/c1_BoW_Sentiment_Model.pkl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  bump-pre-release:
+    needs: build-and-release-model
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Compute next pre-release version
+        id: compute-pre-release
+        run: |
+          CURRENT_VERSION=$(cat version.txt)
+          echo "Current version.txt: $CURRENT_VERSION"
+
+          MAJOR=$(echo "$CURRENT_VERSION" | cut -d . -f 1)
+          MINOR=$(echo "$CURRENT_VERSION" | cut -d . -f 2)
+          PATCH=$(echo "$CURRENT_VERSION" | cut -d . -f 3)
+
+          NEXT_PATCH=$((PATCH + 1))
+          TIMESTAMP=$(date -u +"%Y%m%d.%H%M")
+          NEXT_VERSION="${MAJOR}.${MINOR}.${NEXT_PATCH}-pre.${TIMESTAMP}"
+          echo "Computed next pre-release version: $NEXT_VERSION"
+
+          echo "$NEXT_VERSION" > version.txt
+          git add version.txt
+          echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
+          echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and push pre-release version
+        run: |
+          git commit -m "Bump version to ${{ steps.compute-pre-release.outputs.next_version }} after release ${{ needs.build-and-release-model.outputs.version }}" || echo "Nothing to commit"
+          git push origin main

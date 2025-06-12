@@ -4,11 +4,41 @@
 ![coverage](https://img.shields.io/badge/Coverage-96-brightgreen?logo=python&logoColor=white)
 ![test_score](https://img.shields.io/badge/ML_Test_Score-98.3-brightgreen?logo=pytest)
 
+<details>
+  <summary><b>Table of Contents</b></summary>
+  <ol>
+    <li><a href="#about">About</a></li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+         <li><a href="#Requirements">Requirements</a></li>
+         <li><a href="#Install-and-run">Install and Run</a></li>
+         <li><a href="#google-drive-remote-storage-instructions"> Google Drive Remote Storage instructions</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#usage">Usage</a>
+      <ul>
+         <li><a href="#training-the-model">Training the model</a></li>
+         <li><a href="#showing-experimental-results">Showing Experimental Results</a></li>
+         <li><a href="#training-configuration-and-parameters">Training Configuration and Parameters</a></li>
+      </ul>
+    </li>
+    <li><a href="#linting">Linting</a></li>
+    <li><a href="#tests">Tests</a></li>
+    <li><a href="#use-of-generative-ai">Use of Generative AI</a></li>
+  </ol>
+</details>
+
+# About
 This repository contains the DVC-powered machine learning pipeline for training the sentiment analysis model used in our application.
 
 The stucture of this repository was inspired by the [Cookiecutter template](https://github.com/drivendataorg/cookiecutter-data-science/tree/master).
 
 All training code can be found under `src`. Note that the actual preprocessing logic of the training pipeline has ben factored out into the [lib-ml repository](https://github.com/remla25-team12/lib-ml). As such, `src/preprocess_data.py` uses methods from this library.
+
+<!-- TABLE OF CONTENTS -->
+
 
 # Getting Started
 
@@ -34,44 +64,38 @@ All training code can be found under `src`. Note that the actual preprocessing l
 
    > We HIGHLY recommend using a virtual environment, such as `venv` or `conda`, to avoid conflicts with your own Python environments.
 
-3. Link Google Drive as remote storage location in DVC. For ease of use, we will instruct you to set up a Service Account instead of OAuth.
-   1. In Google Cloud Console, create a [Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating).
-      1. In Step 1, after choosing a name and ID, **take note of the email address shown**, then press `Create and continue`\
-         ![alt text](imgs/sa_email.png)
-      2. In Step 2, select the `owner` role, then click `Continue`
-      3. In Step 3, add your own Google Account email address to _both_ role fields, then click `Done`
-   2. Click on the email address and go to the `Keys` tab. Click `Add Key > Create New Key > JSON >  Create`.
-      ![Add key for service account](imgs/sa_key.png)
-   3. A `.json` file will be downloaded automatically. Rename it to `gdrive_sa_credentials.json` and store it in this repo's root folder.
-   4. In Google Drive, create a folder you want to use as your remote storage.
-      Share this folder with the email address associated with the Service Account created earlier.
-   5. Navitage into the folder and **take note of the folder ID**.
-      ![Google Drive folder ID](imgs/gdrive_folder_id.png)
-   6. Run the following commands to initialize the remote Google Drive storage in DVC:
+3. Set up your remote storage. 
+   - For Google Drive instructions, see [this section of the README](#google-drive-remote-storage-instructions).
+   - For local remote storage (recommended), simply add a local storage and set it as the default:
       ```bash
-      dvc remote add myremote gdrive://<FOLDER_ID> -f # Folder ID from previous step
-      dvc remote default myremote
-      dvc remote modify myremote gdrive_acknowledge_abuse true
-      dvc remote modify myremote gdrive_use_service_account true
-      dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json # The Service Account key downloaded earlier
+      dvc remote add -d mylocalremote ~/remotedvc
+      dvc remote default mylocalremote
       ```
 
-## Alternative to Remote Storage: Local Storage
+### Google Drive Remote Storage instructions
+These instructions are for using Google Drive as the remote storage location in DVC. For ease of use, we will instruct you to set up a Service Account instead of OAuth.
+1. In Google Cloud Console, create a [Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating).
+   1. In Step 1, after choosing a name and ID, **take note of the email address shown**, then press `Create and continue`\
+      ![alt text](imgs/sa_email.png)
+   2. In Step 2, select the `owner` role, then click `Continue`
+   3. In Step 3, add your own Google Account email address to _both_ role fields, then click `Done`
+2. Click on the email address and go to the `Keys` tab. Click `Add Key > Create New Key > JSON >  Create`.
+   ![Add key for service account](imgs/sa_key.png)
+3. A `.json` file will be downloaded automatically. Rename it to `gdrive_sa_credentials.json` and store it in this repo's root folder.
+4. In Google Drive, create a folder you want to use as your remote storage.
+   Share this folder with the email address associated with the Service Account created earlier.
+5. Navitage into the folder and **take note of the folder ID**.
+   ![Google Drive folder ID](imgs/gdrive_folder_id.png)
+6. Run the following commands to initialize the remote Google Drive storage in DVC:
+   ```bash
+   dvc remote add myremote gdrive://<FOLDER_ID> -f # Folder ID from previous step
+   dvc remote default myremote
+   dvc remote modify myremote gdrive_acknowledge_abuse true
+   dvc remote modify myremote gdrive_use_service_account true
+   dvc remote modify myremote --local gdrive_service_account_json_file_path gdrive_sa_credentials.json # The Service Account key downloaded earlier
+      ```
 
-Due to the security management of Google Drive, we recommend using a local storage to test our dvc setup.
-
-Add a local storage:
-
-```bash
-dvc remote add -d mylocalremote ~/remotedvc
-```
-
-Set it as the default:
-
-```bash
-dvc remote default mylocalremote
-```
-
+# Usage
 ## Training the Model
 
 Run the training pipeline with DVC:
@@ -97,7 +121,8 @@ These are stored remotely. To download the most recent models from the remote, r
 dvc pull
 ```
 
-> Note that due to problems with querying the Google Drive account too heavily, the `dvc pull` and `dvc push` commands may produce errors when using the remote storage. This is an acknowledged problem, but it is purely related to the security management of Google Drive. However, this does not affect the DVC setup, and you can continue running the following commands in the README.
+> **Note**: Due to Google's security policies, the `dvc pull` and `dvc push` commands may produce errors when using Google Drive as a cloud remote storage. This is an acknowledged problem. Please switch to local remote storage if issues persist.
+
 
 ## Showing Experimental Results
 
@@ -118,10 +143,9 @@ To evaluate and track your machine learning experiments using DVC, you can run t
    > This command displays a table of all tracked experiments along with their metrics, parameters, and timestamps.
 
 ## Training Configuration and Parameters
+In `params.yaml`, you can set training and model parameters, such as whether to train an alternative classifier (default is Naive Bayes).
 
-TODO explain the config.yaml and what people may want to play with while training.
-
-### Code Formatting and Style
+# Linting
 
 1. Run Black (code formatter):
 
@@ -147,17 +171,15 @@ TODO explain the config.yaml and what people may want to play with while trainin
    pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
    ```
 
-## Testing
+We customized the default PyLint configuration to better align with the specific needs of our project, particularly in the context of machine learning workflows. One of the key changes involved relaxing the naming convention rules to accommodate commonly used variable names in ML pipelines, such as `X`, `X_train`, `X_test`, `y`, and `y_pred`.
 
-### Basic Testing
+# Tests
 
 Run the tests using pytest:
 
 ```bash
 pytest tests/
 ```
-
-### Full Test Suite with Coverage and Metrics
 
 Run the complete test suite with coverage and ML test adequacy metrics:
 
@@ -171,12 +193,7 @@ This command will:
 - Generate coverage reports.
 - Calculate ML test adequacy scores.
 
-## Linting
 
-### PyLint
-
-We customized the default PyLint configuration to better align with the specific needs of our project, particularly in the context of machine learning workflows. One of the key changes involved relaxing the naming convention rules to accommodate commonly used variable names in ML pipelines, such as `X`, `X_train`, `X_test`, `y`, and `y_pred`.
-
-## Use of Generative AI:
+# Use of Generative AI:
 
 GitHub Copilot was used to understand and write the pytest cases for model-training.

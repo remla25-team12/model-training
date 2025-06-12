@@ -64,7 +64,13 @@ All training code can be found under `src`. Note that the actual preprocessing l
 
    > We HIGHLY recommend using a virtual environment, such as `venv` or `conda`, to avoid conflicts with your own Python environments.
 
-3. Set up your remote storage. 
+3. Initialize DVC:
+   ```bash
+   dvc init
+   dvc config core.analytics false # disable anonymous aggregate usage analytics
+   ```
+
+4. Set up your remote storage. 
    - For Google Drive instructions, see [this section of the README](#google-drive-remote-storage-instructions).
    - For local remote storage (recommended), simply add a local storage and set it as the default:
       ```bash
@@ -103,19 +109,20 @@ Run the training pipeline with DVC:
 ```bash
 dvc repro
 ```
-
-Then push the trained model to the remote storage:
-
-```bash
-dvc push
-```
-
 The training pipeline generates two model files:
 
 - `Classifier_Sentiment_Model.joblib`: Trained sentiment classification model.
 - `c1_BoW_Sentiment_Model.pkl`: Fitted Bag-of-Words vectorizer.
 
-These are stored remotely. To download the most recent models from the remote, run:
+Push the trained model to the remote storage:
+
+```bash
+dvc push
+```
+
+> Note: If you're working on this repo, make sure to also run commands suggested by DVC in the terminal output, such as `git add dvc.lock`.
+
+To download the most recent models from the remote, run:
 
 ```bash
 dvc pull

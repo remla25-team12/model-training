@@ -52,13 +52,13 @@ jobs:
           sed -i "/!\[pylint\]/c\\${BADGE}" README.md
 
       - name: Download data
-        run: python -m src.get_data.py
+        run: python -m src.get_data
 
       - name: Preprocess data
-        run: python -m src.preprocess_data.py
+        run: python -m src.preprocess_data
 
       - name: Train model
-        run: python -m src.train_model.py
+        run: python -m src.train_model
 
       - name: Run tests with coverage and adequacy metrics
         run: |

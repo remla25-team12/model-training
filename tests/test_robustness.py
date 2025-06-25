@@ -39,12 +39,16 @@ def test_noise_robustness(model, X_y):
             model expects {model.n_features_in_}"
         )
     acc = _slice_accuracy(model, X)
-    assert acc > 0.7, f"Model predictions changed too much \
+    assert (
+        acc > 0.7
+    ), f"Model predictions changed too much \
     with noise (accuracy: {acc})"
     mid = len(X) // 2
     for X_slice in [X[:mid], X[mid:]]:
         slice_acc = _slice_accuracy(model, X_slice)
-        assert slice_acc > 0.7, f"Slice predictions \
+        assert (
+            slice_acc > 0.7
+        ), f"Slice predictions \
         changed too much with noise (accuracy: {slice_acc})"
 
 
@@ -58,14 +62,14 @@ def test_metamorphic_with_repair(model, X_y):
             model expects {model.n_features_in_}"
         )
     scale_factor = 1.1
-    assert _metamorphic_repair(model, X, y, scale_factor), (
-        "Automatic repair failed: accuracy after retraining is too low"
-    )
+    assert _metamorphic_repair(
+        model, X, y, scale_factor
+    ), "Automatic repair failed: accuracy after retraining is too low"
     mid = len(X) // 2
     for X_slice, y_slice in [(X[:mid], y[:mid]), (X[mid:], y[mid:])]:
-        assert _metamorphic_repair(model, X_slice, y_slice, scale_factor), (
-            "Slice automatic repair failed: accuracy after retraining is too low"
-        )
+        assert _metamorphic_repair(
+            model, X_slice, y_slice, scale_factor
+        ), "Slice automatic repair failed: accuracy after retraining is too low"
 
 
 def test_nonfunctional_performance(model, X_y):

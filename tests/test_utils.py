@@ -26,9 +26,9 @@ def test_feature_cost_importance():
         clf_mod.fit(X_mod, y)
         acc = accuracy_score(y, clf_mod.predict(X_mod))
         feature_drops.append(base_acc - acc)
-    assert any(abs(drop) > 0 for drop in feature_drops), (
-        "No feature had any impact on accuracy"
-    )
+    assert any(
+        abs(drop) > 0 for drop in feature_drops
+    ), "No feature had any impact on accuracy"
 
 
 def test_synonym_metamorphic():
@@ -46,6 +46,4 @@ def test_synonym_metamorphic():
         idxs = [0, 1]  # fallback
     X_samples = X[idxs]
     preds = model.predict(X_samples)
-    assert preds[0] == preds[1], (
-        "Model predictions differ for similar samples"
-    )
+    assert preds[0] == preds[1], "Model predictions differ for similar samples"

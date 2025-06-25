@@ -62,7 +62,7 @@ jobs:
 
       - name: Run tests with coverage and adequacy metrics
         run: |
-          python tests/run_tests.txt
+          python tests/run_tests.py
 
       - name: Update README with test metrics
         run: |

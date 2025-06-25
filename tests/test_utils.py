@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from sklearn.metrics import accuracy_score
+
 from src.configure_loader import load_config
 from src.utils import load_classifier, load_preprocessed_data
 

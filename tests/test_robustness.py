@@ -1,8 +1,9 @@
 # tests/test_robustness.py
-import warnings
 import time
-import psutil
+import warnings
+
 import numpy as np
+import psutil
 import pytest
 
 

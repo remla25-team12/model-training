@@ -1,5 +1,5 @@
 [MAIN]
-
+init-hook=import sys; sys.path.insert(0, 'linters/pylint')
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
 # only in one or another interpreter, leading to false positives when analysed.
@@ -165,6 +165,7 @@ unsafe-load-any-extension=no
 # Naming style matching correct argument names.
 argument-naming-style=snake_case
 
+
 # Regular expression matching correct argument names. Overrides argument-
 # naming-style. If left empty, argument names will be checked with the set
 # naming style.
@@ -232,9 +233,11 @@ function-naming-style=snake_case
 # naming-style. If left empty, function names will be checked with the set
 # naming style.
 #function-rgx=
+argument-rgx=([a-z_][a-z0-9_]*|X|y)$
+
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=X,X_train,X_test, y_train, y_test
+good-names=X,X_train,X_test,y_train,y_test
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
@@ -655,7 +658,6 @@ signature-mutators=
 
 
 [VARIABLES]
-
 # List of additional names supposed to be defined in builtins. Remember that
 # you should avoid defining new builtins when possible.
 additional-builtins=

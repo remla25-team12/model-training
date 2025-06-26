@@ -1,5 +1,6 @@
 # tests/test_robustness.py
 import pickle
+import random
 import time
 from pathlib import Path
 
@@ -47,9 +48,27 @@ def test_vectorizer_dimension(load_vectorizer):
     assert vocab_size == 1420, f"Expected 1420 features, got {vocab_size}"
 
 
+def replace_with_synonyms(sentence, synonym_map):
+    return " ".join([synonym_map.get(word, word) for word in sentence.split()])
+
+
+def try_repair(mutated_sentence, original_pred, mutant_map, model, vectorizer):
+    words = mutated_sentence.split()
+    for j, word in enumerate(words):
+        if word in mutant_map:
+            for mutant in mutant_map[word]:
+                words[j] = mutant
+                repaired_sentence = " ".join(words)
+                repaired_feature = preprocess_input(repaired_sentence, vectorizer)
+                repaired_pred = model.predict(repaired_feature)[0]
+                if repaired_pred == original_pred:
+                    return repaired_sentence
+    return None
+
+
 def test_mutamorphic_with_synonym_replacement(load_vectorizer, load_model):
     """
-    Mutamorphic test with synonym replacement to check model consistency.
+    Metamorphic test with synonym replacement to check model consistency.
     """
     test_sentences = [
         "This restaurant is amazing",
@@ -72,35 +91,23 @@ def test_mutamorphic_with_synonym_replacement(load_vectorizer, load_model):
         "sluggish": ["lazy", "unhurried", "bad"],
         "welcoming": ["hospitable", "warm", "accommodating"],
     }
-    mutated_sentences = []
-    for i, sentence in enumerate(test_sentences):
-        words = sentence.split()
-        mutated_sentence = " ".join([synonym_map.get(word, word) for word in words])
-        mutated_sentences.append(mutated_sentence)
-        original_feature = preprocess_input(sentence, load_vectorizer)
-        mutated_feature = preprocess_input(mutated_sentence, load_vectorizer)
-        original_preds = load_model.predict(original_feature)[0]
-        mutated_preds = load_model.predict(mutated_feature)[0]
-        if not original_preds == mutated_preds:
-            repaired = False
-            words = mutated_sentences[i].split()
-            for j, word in enumerate(words):
-                if word in mutant_map:
-                    for mutant in mutant_map[word]:
-                        words[j] = mutant
-                        repaired_sentence = " ".join(words)
-                        repaired_feature = preprocess_input(
-                            repaired_sentence, load_vectorizer
-                        )
-                        repaired_preds = load_model.predict(repaired_feature)[0]
-                        if repaired_preds == original_preds:
-                            mutated_sentences[i] = repaired_sentence
-                            repaired = True
-                            break
-            if not repaired:
-                assert (
-                    False
-                ), f"Inconsistency found between original and mutated predictions for: {mutated_sentences[i]}"
+
+    for sentence in test_sentences:
+        mutated_sentence = replace_with_synonyms(sentence, synonym_map)
+        original_vector = preprocess_input(sentence, load_vectorizer)
+        mutated_vector = preprocess_input(mutated_sentence, load_vectorizer)
+
+        original_pred = load_model.predict(original_vector)[0]
+        mutated_pred = load_model.predict(mutated_vector)[0]
+
+        if original_pred != mutated_pred:
+            repaired_sentence = try_repair(
+                mutated_sentence, original_pred, mutant_map, load_model, load_vectorizer
+            )
+            assert repaired_sentence is not None, (
+                f"Inconsistency found between original and mutated "
+                f"predictions for: {mutated_sentence}"
+            )
 
 
 def test_noise_robustness_text(load_vectorizer, load_model):
@@ -116,7 +123,6 @@ def test_noise_robustness_text(load_vectorizer, load_model):
     ]
 
     def add_typo_noise(sentence, noise_level=0.15):
-        import random
 
         chars = list(sentence)
         n_noisy = int(len(chars) * noise_level)

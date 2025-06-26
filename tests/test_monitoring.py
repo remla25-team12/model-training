@@ -1,8 +1,8 @@
 # tests/test_monitoring.py
 import numpy as np
 from sklearn.metrics import accuracy_score
-
-
+import pytest
+pytestmark = pytest.mark.order(5)
 def evaluate_test_model(model, X, y):
     """Test-specific model evaluation function"""
     y_pred = model.predict(X)

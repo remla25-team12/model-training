@@ -2,7 +2,8 @@
 import time
 
 import psutil
-
+import pytest
+pytestmark = pytest.mark.order(6)
 
 def get_memory_usage():
     """Get current memory usage in MB"""

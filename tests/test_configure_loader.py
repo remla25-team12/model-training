@@ -1,5 +1,6 @@
 from src.configure_loader import load_config
-
+import pytest
+pytestmark = pytest.mark.order(1)
 
 def test_load_config():
     """Test if configuration can be loaded successfully"""

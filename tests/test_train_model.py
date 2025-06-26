@@ -12,7 +12,7 @@ from sklearn.naive_bayes import GaussianNB
 from src.configure_loader import load_config
 from src.train_model import train_model
 
-
+pytestmark = pytest.mark.order(10)
 @pytest.fixture
 def config():
     """Load test configuration"""

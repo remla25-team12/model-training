@@ -169,13 +169,13 @@ In `params.yaml`, you can set training and model parameters, such as whether to 
 3. Run Flake8 (style guide enforcement):
 
    ```bash
-   flake8 .
+   flake8 --config=linters/setup.cfg .
    ```
 
 4. Run PyLint with custom rules (including nan-check):
 
    ```bash
-   pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
+   pylint --rcfile=.pylintrc --clear-cache-post-run=y src tests linters
    ```
 
 We customized the default PyLint configuration to better align with the specific needs of our project, particularly in the context of machine learning workflows. One of the key changes involved relaxing the naming convention rules to accommodate commonly used variable names in ML pipelines, such as `X`, `X_train`, `X_test`, `y`, and `y_pred`.
@@ -217,7 +217,7 @@ This command will:
 
 | Test Type                        | Test File / Function(s)                                   | Description                                                                                           |
 |----------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| **Mutamorphic (Metamorphic) Testing** | `tests/test_utils.py::test_synonym_metamorphic`<br>`tests/test_robustness.py::test_metamorphic_with_repair` | Checks model consistency for contextually similar inputs (e.g., synonyms) and attempts automatic repair|
+| **Mutamorphic (Metamorphic) Testing** | `tests/test_utils.py::test_synonym_metamorphic`<br>`tests/test_robustness.py::test_mutamorphic_with_synonym_replacement` | Checks model consistency for contextually similar inputs (e.g., synonyms) and attempts automatic repair|
 | **Feature Cost Testing**         | `tests/test_utils.py::test_feature_cost_importance`       | Assesses the impact of each feature on model performance                                              |
 
 # Use of Generative AI:

@@ -8,6 +8,15 @@ dataset:
     X_filename: "X.joblib"
     y_filename: "y.joblib"
 
+test_dataset:
+  raw:
+    output_dir: "./data/test_raw"
+    output_filename: "test_RestaurantReviews.tsv"
+  preprocessed:
+    output_dir: "./data/test_processed"
+    X_filename: "X_test.joblib"
+    y_filename: "y_test.joblib"
+
 model:
   type: "GaussianNB"
   count_vectorizer:
@@ -17,6 +26,15 @@ model:
   classifier:
     model_dir: "./models"
     model_filename: "Classifier_Sentiment_Model.joblib"
+
+test_model:
+  type: "GaussianNB"
+  count_vectorizer:
+    bow_dir: "./test_models"
+    bow_filename: "test_BoW_Sentiment_Model.pkl"
+  classifier:
+    model_dir: "./test_models"
+    model_filename: "test_Classifier_Sentiment_Model.joblib"
 
 training:
   test_size: 0.2

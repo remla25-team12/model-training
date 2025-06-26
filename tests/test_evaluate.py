@@ -1,13 +1,14 @@
 import json
 from unittest.mock import patch
-
+from pathlib import Path
+import pickle
 import numpy as np
 import pytest
 from sklearn.naive_bayes import GaussianNB
 
 from src.configure_loader import load_config
 from src.evaluate import evaluate_model
-
+pytestmark = pytest.mark.order(2)
 
 @pytest.fixture
 def config():
@@ -33,7 +34,22 @@ def sample_classifier():
     clf.fit(X, y)
     return clf
 
+@pytest.fixture
+def load_vectorizer():
+    """
+    Fixture that loads the pre-trained CountVectorizer for testing.
+    """
+    vectorizer_path = Path(__file__).parent.parent / "models" / "c1_BoW_Sentiment_Model.pkl"
+    if not vectorizer_path.exists():
+        raise FileNotFoundError(f"Vectorizer file not found: {vectorizer_path}")
+    with open(vectorizer_path, 'rb') as f:
+        vectorizer = pickle.load(f)
+    return vectorizer
 
+def test_vectorizer_dimension(load_vectorizer):
+    vocab_size = len(load_vectorizer.get_feature_names_out())
+    assert vocab_size == 1420, f"Expected 1420 features, got {vocab_size}"
+    
 @patch("src.evaluate.load_preprocessed_data")
 @patch("src.evaluate.load_classifier")
 def test_evaluate_model_success(

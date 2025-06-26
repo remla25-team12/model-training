@@ -1,7 +1,7 @@
 # Model Training
 
 ![pylint](https://img.shields.io/badge/PyLint-10.00-brightgreen?logo=python&logoColor=white)
-![coverage](https://img.shields.io/badge/Coverage-82-yellow?logo=python&logoColor=white)
+![coverage](https://img.shields.io/badge/Coverage-82-brightgreen?logo=python&logoColor=white)
 ![test_score](https://img.shields.io/badge/ML_Test_Score-92.8-brightgreen?logo=pytest)
 
 <details>

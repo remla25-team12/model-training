@@ -1,8 +1,8 @@
 # Model Training
 
 ![pylint](https://img.shields.io/badge/PyLint-10.00-brightgreen?logo=python&logoColor=white)
-![coverage](https://img.shields.io/badge/Coverage-96-brightgreen?logo=python&logoColor=white)
-![test_score](https://img.shields.io/badge/ML_Test_Score-98.3-brightgreen?logo=pytest)
+![coverage](https://img.shields.io/badge/Coverage-82-brightgreen?logo=python&logoColor=white)
+![test_score](https://img.shields.io/badge/ML_Test_Score-92.8-brightgreen?logo=pytest)
 
 <details>
   <summary><b>Table of Contents</b></summary>
@@ -200,6 +200,25 @@ This command will:
 - Generate coverage reports.
 - Calculate ML test adequacy scores.
 
+**Test names and file organization make it clear which category each test belongs to.**
+- For example, `test_utils.py` contains infrastructure tests, `test_robustness.py` contains robustness tests, etc.
+- This organization helps ensure clarity and maintainability for ML Test Score methodology.
+
+**ML Test Score Category Mapping:**
+
+| Category                | Test File(s) / Function(s)                                                                                  | Description / Coverage                                                                                  |
+|-------------------------|-------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| **Feature and Data**    | `tests/test_preprocess_data.py`<br>`tests/test_utils.py::test_feature_cost_importance`<br>`tests/test_monitoring.py::test_data_drift`                      | Data loading, preprocessing, feature cost, data drift, and integrity tests                             |
+| **Model Development**   | `tests/test_train_model.py`<br>`tests/test_evaluate.py`<br>`tests/test_fairness.py`<br>`tests/test_robustness.py`<br>`tests/test_utils.py::test_synonym_metamorphic` | Model training, evaluation, fairness, robustness, and mutamorphic (metamorphic) testing                |
+| **ML Infrastructure**   | `tests/test_configure_loader.py`<br>`tests/test_utils.py`                                                   | Config loading, utility functions, pipeline reproducibility                                            |
+| **Monitoring**          | `tests/test_monitoring.py`<br>`tests/test_performance.py`                                                   | Model drift, performance, and non-functional requirements                                              |
+
+**Special Test Types:**
+
+| Test Type                        | Test File / Function(s)                                   | Description                                                                                           |
+|----------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| **Mutamorphic (Metamorphic) Testing** | `tests/test_utils.py::test_synonym_metamorphic`<br>`tests/test_robustness.py::test_mutamorphic_with_synonym_replacement` | Checks model consistency for contextually similar inputs (e.g., synonyms) and attempts automatic repair|
+| **Feature Cost Testing**         | `tests/test_utils.py::test_feature_cost_importance`       | Assesses the impact of each feature on model performance                                              |
 
 # Use of Generative AI:
 

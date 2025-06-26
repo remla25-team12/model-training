@@ -8,7 +8,7 @@ __pycache__/
 secrets/
 gdrive_sa_credentials.json
 .dvc/
-
+test_models/
 # Coverage files
 .coverage
 coverage.xml

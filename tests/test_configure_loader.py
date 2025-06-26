@@ -1,4 +1,8 @@
+import pytest
+
 from src.configure_loader import load_config
+
+pytestmark = pytest.mark.order(1)
 
 
 def test_load_config():

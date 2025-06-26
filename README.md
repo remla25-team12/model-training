@@ -169,13 +169,13 @@ In `params.yaml`, you can set training and model parameters, such as whether to 
 3. Run Flake8 (style guide enforcement):
 
    ```bash
-   flake8 .
+   flake8 --config=linters/setup.cfg .
    ```
 
 4. Run PyLint with custom rules (including nan-check):
 
    ```bash
-   pylint --clear-cache-post-run=y src tests pylint_nan_check setup.py
+   pylint --rcfile=.pylintrc --clear-cache-post-run=y src tests linters
    ```
 
 We customized the default PyLint configuration to better align with the specific needs of our project, particularly in the context of machine learning workflows. One of the key changes involved relaxing the naming convention rules to accommodate commonly used variable names in ML pipelines, such as `X`, `X_train`, `X_test`, `y`, and `y_pred`.

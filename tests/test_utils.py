@@ -1,18 +1,21 @@
-import numpy as np
-import pytest
-from sklearn.metrics import accuracy_score
-from sklearn.base import clone
-from libml import preprocess_input
-from sklearn.inspection import permutation_importance
 import pickle
-import joblib
 from pathlib import Path
 
+import joblib
+import numpy as np
+import pytest
+from libml import preprocess_input
+from sklearn.inspection import permutation_importance
+
 pytestmark = pytest.mark.order(9)
+
+
 @pytest.fixture
 def load_model():
     """Load the pre-trained model."""
-    model_path = Path(__file__).parent.parent / "models" / "Classifier_Sentiment_Model.joblib"
+    model_path = (
+        Path(__file__).parent.parent / "models" / "Classifier_Sentiment_Model.joblib"
+    )
     with open(model_path, "rb") as f:
         return joblib.load(f)
 
@@ -20,7 +23,9 @@ def load_model():
 @pytest.fixture
 def load_vectorizer():
     """Load the pre-trained CountVectorizer."""
-    vectorizer_path = Path(__file__).parent.parent / "models" / "c1_BoW_Sentiment_Model.pkl"
+    vectorizer_path = (
+        Path(__file__).parent.parent / "models" / "c1_BoW_Sentiment_Model.pkl"
+    )
     with open(vectorizer_path, "rb") as f:
         return pickle.load(f)
 
@@ -39,7 +44,7 @@ def test_feature_cost_importance(load_model, load_vectorizer):
         "Great ambiance and tasty dishes.",
         "Awful customer service ruined it.",
         "Yummy pasta and quick service!",
-        "Would not recommend."
+        "Would not recommend.",
     ]
     labels = np.array([1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
 
@@ -61,7 +66,7 @@ def test_synonym_metamorphic(load_model, load_vectorizer):
         ("Wow... Loved this place.", "Wow... Adored this place."),
         ("Crust is not good.", "Crust is terrible."),
         ("I enjoyed the food.", "I liked the food."),
-        ("Service was very bad.", "Service was awful.")
+        ("Service was very bad.", "Service was awful."),
     ]
 
     for sent1, sent2 in pairs:

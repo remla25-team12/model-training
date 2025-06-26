@@ -1,72 +1,81 @@
 # tests/test_robustness.py
+import pickle
 import time
-import warnings
+from pathlib import Path
+
+import joblib
 import numpy as np
 import psutil
 import pytest
-import joblib
-import pickle
-from pathlib import Path
 from libml import preprocess_input
 
 pytestmark = pytest.mark.order(8)
+
+
 @pytest.fixture
 def load_model():
     """
     Fixture that loads the pre-trained model for testing.
     """
-    model_path = Path(__file__).parent.parent / "models" / "Classifier_Sentiment_Model.joblib"
+    model_path = (
+        Path(__file__).parent.parent / "models" / "Classifier_Sentiment_Model.joblib"
+    )
     if not model_path.exists():
         raise FileNotFoundError(f"Model file not found: {model_path}")
-    with open(model_path, 'rb') as f:
+    with open(model_path, "rb") as f:
         model = joblib.load(f)
     return model
+
 
 @pytest.fixture
 def load_vectorizer():
     """
     Fixture that loads the pre-trained CountVectorizer for testing.
     """
-    vectorizer_path = Path(__file__).parent.parent / "models" / "c1_BoW_Sentiment_Model.pkl"
+    vectorizer_path = (
+        Path(__file__).parent.parent / "models" / "c1_BoW_Sentiment_Model.pkl"
+    )
     if not vectorizer_path.exists():
         raise FileNotFoundError(f"Vectorizer file not found: {vectorizer_path}")
-    with open(vectorizer_path, 'rb') as f:
+    with open(vectorizer_path, "rb") as f:
         vectorizer = pickle.load(f)
     return vectorizer
+
 
 def test_vectorizer_dimension(load_vectorizer):
     vocab_size = len(load_vectorizer.get_feature_names_out())
     assert vocab_size == 1420, f"Expected 1420 features, got {vocab_size}"
-    
+
+
 def test_mutamorphic_with_synonym_replacement(load_vectorizer, load_model):
     """
     Mutamorphic test with synonym replacement to check model consistency.
     """
     test_sentences = [
-        'This restaurant is amazing',
-        'The food was terrible',
-        'I love the ambiance',
-        'Service was slow',
-        'The staff was friendly'
+        "This restaurant is amazing",
+        "The food was terrible",
+        "I love the ambiance",
+        "Service was slow",
+        "The staff was friendly",
     ]
     synonym_map = {
-        'amazing': 'fantastic',
-        'terrible': 'awful',
-        'love': 'adore',
-        'slow': 'sluggish',
-        'friendly': 'welcoming'
+        "amazing": "fantastic",
+        "terrible": "awful",
+        "love": "adore",
+        "slow": "sluggish",
+        "friendly": "welcoming",
     }
     mutant_map = {
-        'fantastic': ['incredible', 'wonderful', 'marvelous'],
-        'awful': ['dreadful', 'horrible', 'appalling'],
-        'adore': ['cherish', 'appreciate', 'treasure'],
-        'sluggish': ['lazy', 'unhurried', 'bad'],
-        'welcoming': ['hospitable', 'warm', 'accommodating']
+        "fantastic": ["incredible", "wonderful", "marvelous"],
+        "awful": ["dreadful", "horrible", "appalling"],
+        "adore": ["cherish", "appreciate", "treasure"],
+        "sluggish": ["lazy", "unhurried", "bad"],
+        "welcoming": ["hospitable", "warm", "accommodating"],
     }
     mutated_sentences = []
     for i, sentence in enumerate(test_sentences):
         words = sentence.split()
-        mutated_sentence = ' '.join([synonym_map.get(word, word) for word in words])
+        mutated_sentence = " ".join([synonym_map.get(word, word) for word in words])
         mutated_sentences.append(mutated_sentence)
         original_feature = preprocess_input(sentence, load_vectorizer)
         mutated_feature = preprocess_input(mutated_sentence, load_vectorizer)
@@ -79,36 +88,42 @@ def test_mutamorphic_with_synonym_replacement(load_vectorizer, load_model):
                 if word in mutant_map:
                     for mutant in mutant_map[word]:
                         words[j] = mutant
-                        repaired_sentence = ' '.join(words)
-                        repaired_feature = preprocess_input(repaired_sentence, load_vectorizer)
+                        repaired_sentence = " ".join(words)
+                        repaired_feature = preprocess_input(
+                            repaired_sentence, load_vectorizer
+                        )
                         repaired_preds = load_model.predict(repaired_feature)[0]
                         if repaired_preds == original_preds:
                             mutated_sentences[i] = repaired_sentence
                             repaired = True
                             break
             if not repaired:
-                assert False, f"Inconsistency found between original and mutated predictions for: {mutated_sentences[i]}"
+                assert (
+                    False
+                ), f"Inconsistency found between original and mutated predictions for: {mutated_sentences[i]}"
+
 
 def test_noise_robustness_text(load_vectorizer, load_model):
     """
     Test model robustness against character-level noise: allow a small number of mismatches.
     """
     test_sentences = [
-        'This restaurant is amazing',
-        'The food was terrible',
-        'I love the ambiance',
-        'Service was slow',
-        'The staff was friendly'
+        "This restaurant is amazing",
+        "The food was terrible",
+        "I love the ambiance",
+        "Service was slow",
+        "The staff was friendly",
     ]
 
     def add_typo_noise(sentence, noise_level=0.15):
         import random
+
         chars = list(sentence)
         n_noisy = int(len(chars) * noise_level)
         for _ in range(n_noisy):
             idx = random.randint(0, len(chars) - 1)
-            chars[idx] = random.choice('abcdefghijklmnopqrstuvwxyz')
-        return ''.join(chars)
+            chars[idx] = random.choice("abcdefghijklmnopqrstuvwxyz")
+        return "".join(chars)
 
     mismatches = 0
 
@@ -123,18 +138,21 @@ def test_noise_robustness_text(load_vectorizer, load_model):
             mismatches += 1
 
     # Allow up to 40% mismatch (2 out of 5)
-    assert mismatches <= 2, f"Too many prediction changes under noise: {mismatches} mismatches"
+    assert (
+        mismatches <= 2
+    ), f"Too many prediction changes under noise: {mismatches} mismatches"
+
 
 def test_nonfunctional_performance_text(load_vectorizer, load_model):
     """
     Test inference time and memory usage (non-functional requirements) for text input.
     """
     test_sentences = [
-        'This restaurant is amazing',
-        'The food was terrible',
-        'I love the ambiance',
-        'Service was slow',
-        'The staff was friendly'
+        "This restaurant is amazing",
+        "The food was terrible",
+        "I love the ambiance",
+        "Service was slow",
+        "The staff was friendly",
     ] * 100  # Increase for a more substantial test
     X = [preprocess_input(sentence, load_vectorizer)[0] for sentence in test_sentences]
     X = np.array(X)

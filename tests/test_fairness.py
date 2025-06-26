@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
+
 pytestmark = pytest.mark.order(3)
+
 
 def test_fairness_group_parity(model, X_y):
     """Test prediction parity across synthetic groups"""

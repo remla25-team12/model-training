@@ -6,7 +6,9 @@ import pytest
 
 from src.configure_loader import load_config
 from src.get_data import download_data
+
 pytestmark = pytest.mark.order(4)
+
 
 @pytest.fixture
 def config():
